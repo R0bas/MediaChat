@@ -1,1 +1,6 @@
 /.env.local
+node_modules/*
+.env
+*.txt
+*.exe
+*.bat

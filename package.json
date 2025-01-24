@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "node --trace-warnings index.js",
-    "start": "node index.js"
+    "start": "TITLE Livechat && node index.js"
   },
   "repository": {
     "type": "git",

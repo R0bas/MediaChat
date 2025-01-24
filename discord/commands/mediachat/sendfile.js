@@ -70,7 +70,6 @@ module.exports = {
     async execute(interaction) {
 
         if (roleCheck(interaction)) return;
-
         const file = interaction.options.getAttachment('file');
         const positionx = interaction.options.getString('positionx') == null ? "center" : interaction.options.getString('positionx');
         const positiony = interaction.options.getString('positiony') == null ? "center" : interaction.options.getString('positiony');
@@ -80,7 +79,7 @@ module.exports = {
         const text_color = interaction.options.getString('text_color') == null ? "#FFFFFF" : interaction.options.getString('text_color');
         const duration = interaction.options.getNumber('duration') ?? 10;
         const ratio = interaction.options.getString('ratio') == null ? 1 : parseFloat(interaction.options.getString('ratio').replace(",", "."));
-        const text_font = interaction.options.getString('text_font') == null ? "Arial" : interaction.options.getString('text_font');
+        const text_font = interaction.options.getString('text_font') == null ? "sans-serif" : interaction.options.getString('text_font');
         const text_font_size = interaction.options.getInteger('text_font_size') ? interaction.options.getInteger('text_font_size') : "100";
         const fullscreen = interaction.options.getBoolean('fullscreen') ? interaction.options.getBoolean('fullscreen') : false;
         const anonymous = interaction.options.getBoolean('anonymous') ? interaction.options.getBoolean('anonymous') : false;

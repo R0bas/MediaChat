@@ -117,6 +117,21 @@ Une fois cela fait, dès que vous allez utiliser l'option greenscreen, le fond v
 Pour utiliser le bot, vous devez créer une application sur le site de Discord, puis créer un bot et récupérer le token, les configurations se font dans le fichier `.env`
 
 Dans le fichier config, vous retrouverez également un champ `role` qui permet de protéger le bot pour les utilisateurs ayant le rôle `MediaChat`
+
+## Template du .env
+
+```
+PORT=3000
+ENVURL=http://localhost:3000
+
+clientId=client-id-here
+guildId=guild-id-here
+token=token-here
+role=false
+
+sourceName=mediachat
+```
+
 # Contact
 Si vous souhaitez me contacter, j'ai un serveur [Discord](https://discord.gg/uwcTrVe68r)
 

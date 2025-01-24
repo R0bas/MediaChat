@@ -16,10 +16,10 @@ class Text {
     duration,
     position
   ) {
-    this.textData = textData;
-    this.fontFamily = fontFamily;
+    this.textData = textData ? textData.toUpperCase() : textData;
+    this.fontFamily = 'sans-serif';
     this.fontColor = fontColor;
-    this.fontSize = fontSize;
+    this.fontSize = parseInt(fontSize)/2;
     this.duration = duration;
     this.position = position;
   }
