@@ -10,7 +10,7 @@ const { client, token } = require("./discord/index.js");
 const { deployCommands } = require("./discord/deploy-commands.js");
 const axios = require("axios");
 const semver = require("semver");
-
+const fs = require('fs');
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
@@ -20,9 +20,11 @@ const io = new Server(server, {
   },
 });
 
+
 const { PORT } = require("./vars.js");
 const { Video } = require("./entity/Video");
 const { FileToSend } = require("./entity/FileToSend");
+const get_mp4_url = require("./lib/get_mp4_url.js");
 
 app.use(bodyParser.json({ limit: "100mb" }));
 app.use(express.static(__dirname + "/static"));
@@ -35,48 +37,10 @@ app.use(
   })
 );
 
-async function get_mp4_url(url) {
-  return new Promise((resolve, reject) => {
-    youtubedl(url, {
-      download: false,
-      "get-url": true,
-    })
-      .then((output) => resolve(output))
-      .catch((error) => reject(error));
-  });
-}
+
 
 app.get("/video-url", async (req, res) => {
-  const video_url = req.query.url;
-
-  if (video_url) {
-    if (video_url.includes("youtube") || video_url.includes("twitch")) {
-      return res.status(200).json({
-        message: "Impossible d'obtenir l'URL de la vidéo.",
-      });
-    }
-
-    try {
-      const url = await get_mp4_url(video_url);
-      if (url) {
-        let video = new Video(url);
-        let fileToSend = new FileToSend(video);
-        return res.status(200).json(fileToSend);
-      } else {
-        return res.status(200).json({
-          message: "Impossible d'obtenir l'URL de la vidéo.",
-        });
-      }
-    } catch (error) {
-      return res
-        .status(200)
-        .json({ message: "Veuillez fournir une URL de vidéo." });
-    }
-  } else {
-    return res
-      .status(200)
-      .json({ message: "Veuillez fournir une URL de vidéo." });
-  }
+ return res.download('./static/video.mp4')
 });
 
 app.get("/cors", async (req, res) => {
@@ -115,11 +79,13 @@ app.get("/stream", (req, res) => {
 
 app.post("/sendFile", (req, res) => {
   const fileToSend = req.body;
+  console.log(fileToSend)
 
   if (fileToSend.destination.name !== undefined) {
     io.in(fileToSend.destination.name).emit("sendFile", fileToSend);
   } else {
     io.emit("sendFile", fileToSend);
+    console.log("c'est emit :)");
   }
 
   console.log("Média envoyé");
@@ -186,22 +152,22 @@ io.on("connection", (socket) => {
 server.listen(PORT, () => {
   console.log("Listening on *:" + PORT);
 
-  fetch(
-    "https://api.github.com/repos/Alorf/MediaChat/contents/package.json?ref=master"
-  )
-    .then((response) => response.json())
-    .then((data) => {
-      const package = JSON.parse(
-        Buffer.from(data.content, "base64").toString()
-      );
-      const latestVersion = package.version;
-      const currentVersion = require("./package.json").version;
-      if (semver.gt(latestVersion, currentVersion)) {
-        console.log(
-          `\x1b[33m[INFO]\x1b[0m A new version of mediachat is available (${latestVersion}), current (${currentVersion}).`
-        );
-      }
-    });
+  // fetch(
+  //   "https://api.github.com/repos/Alorf/MediaChat/contents/package.json?ref=master"
+  // )
+  //   .then((response) => response.json())
+  //   .then((data) => {
+  //     const package = JSON.parse(
+  //       Buffer.from(data.content, "base64").toString()
+  //     );
+  //     const latestVersion = package.version;
+  //     const currentVersion = require("./package.json").version;
+  //     if (semver.gt(latestVersion, currentVersion)) {
+  //       console.log(
+  //         `\x1b[33m[INFO]\x1b[0m A new version of mediachat is available (${latestVersion}), current (${currentVersion}).`
+  //       );
+  //     }
+  //   });
 
   //Load discord bot commands
   deployCommands();

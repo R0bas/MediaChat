@@ -5,3 +5,4 @@ node_modules/*
 *.exe
 *.bat
 logo.png
+static/video.mp4

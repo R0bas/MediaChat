@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "node --trace-warnings index.js",
-    "start": "TITLE Livechat && node index.js"
+    "start": "TITLE Livechat && node index.js",
+    "start:dev": "nodemon index.js"
   },
   "repository": {
     "type": "git",
@@ -20,9 +21,11 @@
     "discord.js": "^14.11.0",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
+    "nodemon": "^3.1.9",
     "semver": "^7.6.0",
     "socket.io": "^4.7.1",
-    "youtube-dl-exec": "^2.4.6"
+    "youtube-dl-exec": "^2.4.6",
+    "ytdl-core": "npm:@distube/ytdl-core@^4.15.9"
   },
   "devDependencies": {
     "daisyui": "^3.7.4",
