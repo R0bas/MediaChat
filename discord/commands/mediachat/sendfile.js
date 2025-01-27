@@ -120,8 +120,8 @@ module.exports = {
         } else {
             image = new Image(
                 file.url,
-                file.height < 720 ? "auto" : file.width,
-                file.height > 1080 ? 1080 : file.height < 720 ? 720 : file.height,
+                file.width, // < 720 ? "auto" : file.width,
+                file.height, // > 1080 ? 1080 : file.height < 720 ? 720 : file.height,
                 fullscreen,
                 duration,
                 position,
