@@ -1,15 +1,4 @@
-const dotenv = require('dotenv');
-const fs = require('fs');
-
-if (fs.existsSync('.env.local')) {
-    console.log("Loading .env.local");
-    dotenv.config({ path: '.env.local' });
-} else {
-    console.log('.env.local file not found, skipping');
-}
-
-
-dotenv.config();
+const dotenv = require('dotenv').config();
 
 const PORT = process.env.PORT || 3000;
 const ENVURL = process.env.ENVURL || "http://localhost:3000";

@@ -1,39 +1,27 @@
-const { ENVURL } = require("./vars.js");
+const dotenv = require('dotenv').config();
 const express = require("express");
-const cors = require("cors");
 const stream = require("stream");
 const http = require("http");
 const youtubedl = require("youtube-dl-exec");
 const { Server } = require("socket.io");
-const bodyParser = require("body-parser");
 const { client, token } = require("./discord/index.js");
 const { deployCommands } = require("./discord/deploy-commands.js");
 const axios = require("axios");
-const semver = require("semver");
+const { Video } = require("./entity/Video");
+const { FileToSend } = require("./entity/FileToSend");
+const { expressConfig } = require("./infra/webserver/express.js");
+const { port, corsOptions } = require("./config/config.js");
 
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
-  cors: {
-    origin: "*",
-    methods: ["GET", "POST"],
-  },
+  cors: corsOptions
 });
+//sideEffects
+let isQueue = false;
 
-const { PORT } = require("./vars.js");
-const { Video } = require("./entity/Video");
-const { FileToSend } = require("./entity/FileToSend");
+expressConfig(app);
 
-app.use(bodyParser.json({ limit: "100mb" }));
-app.use(express.static(__dirname + "/static"));
-app.use("/assets", express.static(__dirname + "/static/dist/assets"));
-app.use("/fonts", express.static(__dirname + "/fonts"));
-app.use(
-  cors({
-    origin: "*",
-    methods: ["GET", "POST"],
-  })
-);
 
 async function get_mp4_url(url) {
   return new Promise((resolve, reject) => {
@@ -154,7 +142,6 @@ app.post("/skip", (req, res) => {
   res.status(200).send("ok");
 });
 
-let isQueue = false;
 
 app.post("/setup", (req, res) => {
   const data = req.body;
@@ -168,7 +155,7 @@ app.post("/setup", (req, res) => {
 });
 
 app.get("/env", (req, res) => {
-  res.status(200).json({ env: ENVURL });
+  res.status(200).json({ env: url });
 });
 
 io.on("connection", (socket) => {
@@ -183,26 +170,8 @@ io.on("connection", (socket) => {
   });
 });
 
-server.listen(PORT, () => {
-  console.log("Listening on *:" + PORT);
-
-  fetch(
-    "https://api.github.com/repos/Alorf/MediaChat/contents/package.json?ref=master"
-  )
-    .then((response) => response.json())
-    .then((data) => {
-      const package = JSON.parse(
-        Buffer.from(data.content, "base64").toString()
-      );
-      const latestVersion = package.version;
-      const currentVersion = require("./package.json").version;
-      if (semver.gt(latestVersion, currentVersion)) {
-        console.log(
-          `\x1b[33m[INFO]\x1b[0m A new version of mediachat is available (${latestVersion}), current (${currentVersion}).`
-        );
-      }
-    });
-
+server.listen(port, () => {
+  console.info(`Listening on ${port}`);
   //Load discord bot commands
   deployCommands();
   //Start discord server
