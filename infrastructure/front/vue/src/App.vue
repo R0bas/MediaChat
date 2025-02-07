@@ -1,9 +1,12 @@
 <script setup lang="ts">
-import { socket } from "@/socket";
 import { state } from "@/socket";
 import { onMounted, useTemplateRef, watch } from "vue";
 
 const player = useTemplateRef('player')
+
+watch(() => state.currentMediaChat, () => {
+  console.log('currentMediaChat', state.currentMediaChat)
+})
 
 const playVideo = () => {
   if (player.value) {

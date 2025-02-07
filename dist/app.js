@@ -18,6 +18,7 @@ const socket_io_1 = require("socket.io");
 const http_1 = __importDefault(require("http"));
 const config_1 = __importDefault(require("./infrastructure/express/config"));
 const discord_1 = __importDefault(require("./infrastructure/discord"));
+require("dotenv/config");
 const app = (0, express_1.default)();
 const port = 3000;
 const server = http_1.default.createServer(app);
@@ -26,13 +27,8 @@ exports.io = new socket_io_1.Server(server, {
         origin: "*",
     },
 });
-const { token, clientId, guildId } = {
-    token: "MTMzNDI3MTg0ODMwMDU0ODE0Ng.G_7L9n.nssoK5kUP-iFJck489WkYGL2bYjwMUpVO_rJV8",
-    clientId: "1334271848300548146",
-    guildId: "1334198171567394908",
-};
 (0, config_1.default)(app);
-discord_1.default.login(token);
+discord_1.default.login(process.env.DISCORD_TOKEN);
 exports.io.on("connection", () => {
     console.info("a user connected");
 });

@@ -54,9 +54,6 @@ const validateMediaChat = (mediachat) => {
     if (!mediachat.author) {
         throw new Error("Author is required");
     }
-    if (!mediachat.duration) {
-        throw new Error("Duration is required");
-    }
     if (!mediachat.message && !mediachat.media) {
         throw new Error("Message or media is required");
     }

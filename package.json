@@ -23,6 +23,7 @@
   "dependencies": {
     "@tsconfig/node20": "^20.1.4",
     "discord.js": "^14.17.3",
+    "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "socket.io": "^4.8.1",
     "youtube-dl-exec": "^3.0.15"

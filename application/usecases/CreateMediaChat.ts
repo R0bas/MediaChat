@@ -7,7 +7,7 @@ export class CreateMediaChat {
   constructor(private mediaChatRepository: IMediaChatRepository) {}
   async execute(
     author: Author,
-    duration: number,
+    duration: number | null,
     media: Media,
     message: string,
     options: MediachatOptions

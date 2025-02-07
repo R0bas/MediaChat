@@ -1,14 +1,21 @@
 import { Author } from "./Author";
 import { Media } from "./Media";
 
+
+export interface PositionX {
+  positionX: "left" | "center" | "right";
+}
+export interface PositionY {
+  positionY: "top" | "center" | "bottom";
+}
 export interface MediachatOptions {
   file: {
-    positionX: "left" | "center" | "right";
-    positionY: "top" | "center" | "bottom";
+    positionX: PositionX;
+    positionY: PositionY;
   };
   text: {
-    positionX: "left" | "center" | "right";
-    positionY: "top" | "center" | "bottom";
+    positionX: PositionX;
+    positionY: PositionY;
     color: string;
     fontSize: number;
     fontFamily: string;
@@ -20,7 +27,7 @@ export class Mediachat {
   constructor(
     public readonly id: string,
     public readonly author: Author,
-    public readonly duration: number,
+    public readonly duration: number | null,
     public readonly message?: string,
     public readonly media?: Media,
     public readonly options?: MediachatOptions,
@@ -46,12 +53,12 @@ export class Mediachat {
     if (!options) {
       this.options = {
         file: {
-          positionX: "center",
-          positionY: "center",
+          positionX: "center" as unknown as PositionX,
+          positionY: "center" as unknown as PositionY,
         },
         text: {
-          positionX: "center",
-          positionY: "bottom",
+          positionX: "center" as unknown as PositionX,
+          positionY: "bottom" as unknown as PositionY,
           color: "#000000",
           fontSize: 16,
           fontFamily: "Arial",
@@ -69,9 +76,6 @@ export class Mediachat {
 const validateMediaChat = (mediachat: Mediachat) => {
   if (!mediachat.author) {
     throw new Error("Author is required");
-  }
-  if (!mediachat.duration) {
-    throw new Error("Duration is required");
   }
   if (!mediachat.message && !mediachat.media) {
     throw new Error("Message or media is required");

@@ -4,18 +4,27 @@ import {
   Events,
   GatewayIntentBits,
   MessageFlags,
+  SlashCommandBuilder,
 } from "discord.js";
 import path from "path";
 import fs from "fs";
 
-const client = new Client({
+class Command {
+  data!: SlashCommandBuilder;
+  execute!: CallableFunction;
+}
+class ClientWithCommands extends Client {
+  commands!: Collection<string, Command>;
+}
+
+const client: ClientWithCommands = new Client({
   intents: [
     GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildMessages,
     GatewayIntentBits.GuildMessageReactions,
   ],
-});
-//@ts-expect-error : waiting for the discord.js v14 typings to be updated
+}) as ClientWithCommands;
+
 client.commands = new Collection();
 const foldersPath = path.join(__dirname, "commands");
 const commandFolders = fs
@@ -25,11 +34,9 @@ const commandFolders = fs
 (async () => {
   for (const folder of commandFolders) {
     const filePath = path.join(foldersPath, folder);
-    const command = await import(filePath);
-    console.log(command.default);
+    const command: Command = await import(filePath);
     if ("data" in command && "execute" in command) {
-      //@ts-expect-error : waiting for the discord.js v14 typings to be updated
-      client.commands.set(command.default.data.name, command.default);
+      client.commands.set(command.data.name, command);
     } else {
       console.log(
         `[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`
@@ -44,8 +51,9 @@ client.once(Events.ClientReady, (readyClient) => {
 
 client.on(Events.InteractionCreate, async (interaction) => {
   if (!interaction.isChatInputCommand()) return;
-  //@ts-expect-error : waiting for the discord.js v14 typings to be updated
-  const command = interaction.client.commands.get(interaction.commandName);
+  const command = (interaction.client as ClientWithCommands).commands.get(
+    interaction.commandName
+  );
 
   if (!command) {
     console.error(`No command matching ${interaction.commandName} was found.`);

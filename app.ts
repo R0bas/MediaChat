@@ -3,6 +3,7 @@ import { Server } from "socket.io";
 import http from "http";
 import configExpress from "./infrastructure/express/config";
 import client from "./infrastructure/discord";
+import 'dotenv/config'
 
 const app = express();
 const port = 3000;
@@ -13,14 +14,9 @@ export const io = new Server(server, {
     origin: "*",
   },
 });
-const { token, clientId, guildId } = {
-  token:
-    "MTMzNDI3MTg0ODMwMDU0ODE0Ng.G_7L9n.nssoK5kUP-iFJck489WkYGL2bYjwMUpVO_rJV8",
-  clientId: "1334271848300548146",
-  guildId: "1334198171567394908",
-};
+
 configExpress(app);
-client.login(token);
+client.login(process.env.DISCORD_TOKEN);
 
 io.on("connection", () => {
   console.info("a user connected");
