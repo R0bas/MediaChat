@@ -15,9 +15,9 @@ class CreateMediaChat {
     constructor(mediaChatRepository) {
         this.mediaChatRepository = mediaChatRepository;
     }
-    execute(author, duration, media, message) {
+    execute(author, duration, media, message, options) {
         return __awaiter(this, void 0, void 0, function* () {
-            const mediaChat = new MediaChat_1.Mediachat("id", author, duration, message, media);
+            const mediaChat = new MediaChat_1.Mediachat("id", author, duration, message, media, options);
             yield this.mediaChatRepository.create(mediaChat);
             return mediaChat;
         });

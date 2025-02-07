@@ -2,7 +2,19 @@ import { Author } from "./Author";
 import { Media } from "./Media";
 
 export interface MediachatOptions {
-  id: string;
+  file: {
+    positionX: "left" | "center" | "right";
+    positionY: "top" | "center" | "bottom";
+  };
+  text: {
+    positionX: "left" | "center" | "right";
+    positionY: "top" | "center" | "bottom";
+    color: string;
+    fontSize: number;
+    fontFamily: string;
+  };
+  hideAuthor: boolean;
+}
 
 export class Mediachat {
   constructor(
@@ -11,18 +23,44 @@ export class Mediachat {
     public readonly duration: number,
     public readonly message?: string,
     public readonly media?: Media,
-    public readonly options?: string[],
+    public readonly options?: MediachatOptions,
+    public readonly target?: string,
     public readonly createdAt: Date = new Date()
   ) {
     validateMediaChat(this);
     this.id = id;
     this.author = author;
     this.duration = duration;
+    if (!target) {
+      this.target = "all";
+    }
+    if (target) {
+      this.target = target;
+    }
     if (message) {
       this.message = message;
     }
     if (media) {
       this.media = media;
+    }
+    if (!options) {
+      this.options = {
+        file: {
+          positionX: "center",
+          positionY: "center",
+        },
+        text: {
+          positionX: "center",
+          positionY: "bottom",
+          color: "#000000",
+          fontSize: 16,
+          fontFamily: "Arial",
+        },
+        hideAuthor: false,
+      };
+    }
+    if (options) {
+      this.options = options;
     }
     this.createdAt = createdAt;
   }

@@ -17,8 +17,12 @@ const createMediaChatHandler = (req, res) => __awaiter(void 0, void 0, void 0, f
     try {
         const sendMediaChat = new SendMediaChat_1.SendMediaChat(app_1.io);
         const createMediaChat = new CreateMediaChat_1.CreateMediaChat(sendMediaChat);
-        const { author, duration, media, message } = req.body;
-        const mediaChat = yield createMediaChat.execute(author, duration, media, message);
+        const { author, media, message, options } = req.body;
+        let duration = req.body.duration;
+        if (!duration && media.type === "image") {
+            duration = 5;
+        }
+        const mediaChat = yield createMediaChat.execute(author, duration, media, message, options);
         /* const test = await youtubedl('https://www.youtube.com/watch?v=6xKWiCMKKJg', {
           dumpSingleJson: true,
           noCheckCertificates: true,

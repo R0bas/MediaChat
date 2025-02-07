@@ -1,0 +1,73 @@
+import {
+  Client,
+  Collection,
+  Events,
+  GatewayIntentBits,
+  MessageFlags,
+} from "discord.js";
+import path from "path";
+import fs from "fs";
+
+const client = new Client({
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.GuildMessageReactions,
+  ],
+});
+//@ts-expect-error : waiting for the discord.js v14 typings to be updated
+client.commands = new Collection();
+const foldersPath = path.join(__dirname, "commands");
+const commandFolders = fs
+  .readdirSync(foldersPath)
+  .filter((file) => file.endsWith(".js"));
+
+(async () => {
+  for (const folder of commandFolders) {
+    const filePath = path.join(foldersPath, folder);
+    const command = await import(filePath);
+    console.log(command.default);
+    if ("data" in command && "execute" in command) {
+      //@ts-expect-error : waiting for the discord.js v14 typings to be updated
+      client.commands.set(command.default.data.name, command.default);
+    } else {
+      console.log(
+        `[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`
+      );
+    }
+  }
+})();
+
+client.once(Events.ClientReady, (readyClient) => {
+  console.log(`Ready! Logged in as ${readyClient.user.tag}`);
+});
+
+client.on(Events.InteractionCreate, async (interaction) => {
+  if (!interaction.isChatInputCommand()) return;
+  //@ts-expect-error : waiting for the discord.js v14 typings to be updated
+  const command = interaction.client.commands.get(interaction.commandName);
+
+  if (!command) {
+    console.error(`No command matching ${interaction.commandName} was found.`);
+    return;
+  }
+
+  try {
+    await command.execute(interaction);
+  } catch (error) {
+    console.error(error);
+    if (interaction.replied || interaction.deferred) {
+      await interaction.followUp({
+        content: "There was an error while executing this command!",
+        flags: MessageFlags.Ephemeral,
+      });
+    } else {
+      await interaction.reply({
+        content: "There was an error while executing this command!",
+        flags: MessageFlags.Ephemeral,
+      });
+    }
+  }
+});
+
+export default client;

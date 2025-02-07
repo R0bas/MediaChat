@@ -2,14 +2,23 @@ import { io } from "../../../app";
 import { CreateMediaChat } from "../../../application/usecases/CreateMediaChat";
 import { SendMediaChat } from "../../socket/SendMediaChat";
 import { Request, Response } from "express";
-import youtubedl, { Payload } from "youtube-dl-exec";
 
 export const createMediaChatHandler = async (req: Request, res: Response) => {
   try {
     const sendMediaChat = new SendMediaChat(io);
     const createMediaChat = new CreateMediaChat(sendMediaChat);
-    const { author, duration , media, message } = req.body;
-    const mediaChat = await createMediaChat.execute(author, duration, media, message);
+    const { author, media, message, options } = req.body;
+    let duration = req.body.duration;
+    if (!duration && media.type === "image") {
+      duration = 5;
+    }
+    const mediaChat = await createMediaChat.execute(
+      author,
+      duration,
+      media,
+      message,
+      options
+    );
     /* const test = await youtubedl('https://www.youtube.com/watch?v=6xKWiCMKKJg', {
       dumpSingleJson: true,
       noCheckCertificates: true,
