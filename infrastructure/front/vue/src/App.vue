@@ -20,10 +20,10 @@ const playVideo = () => {
   }
 }
 const MediaIsVideo = computed(() => {
-  return state.currentMediaChat && state.currentMediaChat.media.type === 'video'
+  return state.currentMediaChat.media && state.currentMediaChat.media.type === 'video'
 })
 const MediaIsImage = computed(() => {
-  return state.currentMediaChat && state.currentMediaChat.media.type === 'image'
+  return state.currentMediaChat.media && state.currentMediaChat.media.type === 'image'
 })
 const removeMediaChat = () => {
   state.currentMediaChat = null
@@ -33,7 +33,7 @@ const removeMediaChat = () => {
 
 <template>
   <div class="grid grid-rows-[1fr_3fr_1fr] items-start select-none bg-opacity-1 h-screen gap-2 mt-4 w-full px-5" v-if="state.currentMediaChat">
-    <div id="avatar" class="flex flex-col justify-center items-center floating w-fit">
+    <div v-if="!state.currentMediaChat.options.hideAuthor" id="avatar" class="flex flex-col justify-center items-center floating w-fit">
       <img class="rounded-full md:w-18 w-10" :src="state.currentMediaChat.author.image" alt="avatar" />
       <h2 class="text-center md:text-xl text-sm font-bold uppercase text-outline-black text-white">{{ state.currentMediaChat.author.name }}</h2>
     </div>

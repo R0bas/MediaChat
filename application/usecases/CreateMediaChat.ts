@@ -8,11 +8,11 @@ export class CreateMediaChat {
   async execute(
     author: Author,
     duration: number | null,
-    media: Media,
-    message: string,
-    options: MediachatOptions
+    media?: Media,
+    message?: string,
+    options?: MediachatOptions
   ): Promise<Mediachat> {
-    const mediaChat = new Mediachat("id", author, duration, message, media, options);
+    const mediaChat = media ? new Mediachat("id", author, duration, message, media, options) : new Mediachat("id", author, duration, message, undefined, options);
     await this.mediaChatRepository.create(mediaChat);
     return mediaChat;
   }

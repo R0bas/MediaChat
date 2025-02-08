@@ -47,17 +47,6 @@ export const data = new SlashCommandBuilder()
   .addBooleanOption((option) =>
     option.setName("anonymous").setDescription("true / false")
   )
-  /*   .addIntegerOption((option) =>
-    option
-      .setName("timestamp")
-      .setDescription("A partir de quand la vidéo doit être jouée")
-  ) */
-  /*  .addBooleanOption((option) =>
-    option.setName("muted").setDescription("true / false")
-  ) */
-  /*   .addBooleanOption((option) =>
-    option.setName("greenscreen").setDescription("true / false")
-  ) */
   .addUserOption((option) =>
     option.setName("user").setDescription("Envoyer à un utilisateur")
   );

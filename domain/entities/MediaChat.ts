@@ -9,7 +9,7 @@ export interface PositionY {
   positionY: "top" | "center" | "bottom";
 }
 export interface MediachatOptions {
-  file: {
+  file?: {
     positionX: PositionX;
     positionY: PositionY;
   };
