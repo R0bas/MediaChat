@@ -24,19 +24,19 @@ const MediaIsImage = computed(() => {
 </script>
 
 <template>
-  <div class="flex flex-col items-start justify-between select-none bg-opacity-1 h-screen" v-if="state.currentMediaChat">
-    <div id="avatar" class="flex flex-col justify-center items-center floating pt-4 pl-2">
-      <img class="rounded-full" :src="state.currentMediaChat.author.image" alt="avatar" width="75" height="75" />
-      <h2 class="text-center text-xl font-bold uppercase text-outline-black text-white">{{ state.currentMediaChat.author.name }}</h2>
+  <div class="grid grid-rows-[1fr_3fr_1fr] items-start select-none bg-opacity-1 h-screen gap-2 mt-4 w-full px-5" v-if="state.currentMediaChat">
+    <div id="avatar" class="flex flex-col justify-center items-center floating w-fit">
+      <img class="rounded-full md:w-18 w-10" :src="state.currentMediaChat.author.image" alt="avatar" />
+      <h2 class="text-center md:text-xl text-sm font-bold uppercase text-outline-black text-white">{{ state.currentMediaChat.author.name }}</h2>
     </div>
-    <div class="w-full">
-      <video v-if="MediaIsVideo" @canplay="playVideo" ref="player" class="m-auto h-fit" autoplay>
+    <div>
+      <video v-if="MediaIsVideo" @canplay="playVideo" ref="player" class="m-auto max-h-[78vh]" autoplay>
         <source :src="state.currentMediaChat.media.url" type="video/mp4">
         Your browser does not support the video tag.
       </video>
+      <img v-if="MediaIsImage" :src="state.currentMediaChat.media.url" alt="mediachat" class="h-fit"/>
     </div>
-    <img v-if="MediaIsImage" :src="state.currentMediaChat.media.url" alt="mediachat" class="w-fit mx-10"/>
-    <p class="w-full text-center text-3xl uppercase text-outline-black text-white font-bold">{{ state.currentMediaChat.message }} </p>
+    <p class="w-full text-center md:text-3xl text-sm uppercase text-outline-black text-white font-bold">{{ state.currentMediaChat.message }} </p>
   </div>
 
 </template>
