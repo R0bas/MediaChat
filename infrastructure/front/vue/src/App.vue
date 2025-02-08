@@ -24,7 +24,7 @@ const MediaIsImage = computed(() => {
 </script>
 
 <template>
-  <div class="flex flex-col items-start select-none" v-if="state.currentMediaChat">
+  <div class="flex flex-col items-start select-none bg-opacity-0" v-if="state.currentMediaChat">
     <div id="avatar" class="flex flex-col justify-center items-center floating pt-4 pl-2">
       <img class="rounded-3xl" :src="state.currentMediaChat.author.image" alt="avatar" width="50" height="50" />
       <h2 class="text-center text-xl font-black uppercase">{{ state.currentMediaChat.author.name }}</h2>
