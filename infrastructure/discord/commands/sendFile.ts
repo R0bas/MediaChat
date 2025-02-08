@@ -64,7 +64,7 @@ export const data = new SlashCommandBuilder()
 
 export const execute = async (interaction: ChatInputCommandInteraction) => {
   const file = interaction.options.getAttachment("file");
-  console.log(file);
+
   if (!file) {
     await interaction.reply("No file provided.");
     return;
@@ -75,6 +75,7 @@ export const execute = async (interaction: ChatInputCommandInteraction) => {
     url: file.url,
     id: file.id,
   };
+
   const mediaChatOptions: MediachatOptions = {
     file: {
       positionX: (interaction.options.getString("positionx") ||
@@ -112,7 +113,6 @@ export const execute = async (interaction: ChatInputCommandInteraction) => {
       interaction.options.getString("text") || "",
       mediaChatOptions
     );
-
     await interaction.reply("Media sent.");
   }
     catch (error) {
