@@ -6,7 +6,12 @@ import './assets/main.css'
 const player = useTemplateRef('player')
 
 watch(() => state.currentMediaChat, () => {
-  console.log('currentMediaChat', state.currentMediaChat)
+  if(state.currentMediaChat && state.currentMediaChat.duration) {
+    console.log('currentMediaChat', state.currentMediaChat)
+    setTimeout(() => {
+      removeMediaChat()
+    }, state.currentMediaChat.duration * 1000)
+  }
 })
 
 const playVideo = () => {
@@ -20,6 +25,9 @@ const MediaIsVideo = computed(() => {
 const MediaIsImage = computed(() => {
   return state.currentMediaChat && state.currentMediaChat.media.type === 'image'
 })
+const removeMediaChat = () => {
+  state.currentMediaChat = null
+}
 
 </script>
 
@@ -30,7 +38,7 @@ const MediaIsImage = computed(() => {
       <h2 class="text-center md:text-xl text-sm font-bold uppercase text-outline-black text-white">{{ state.currentMediaChat.author.name }}</h2>
     </div>
     <div>
-      <video v-if="MediaIsVideo" @canplay="playVideo" ref="player" class="m-auto max-h-[78vh]" autoplay>
+      <video v-if="MediaIsVideo" @ended="removeMediaChat" @canplay="playVideo" ref="player" class="m-auto max-h-[78vh]" autoplay>
         <source :src="state.currentMediaChat.media.url" type="video/mp4">
         Your browser does not support the video tag.
       </video>
