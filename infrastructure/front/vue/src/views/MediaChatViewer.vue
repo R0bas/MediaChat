@@ -2,27 +2,27 @@
 import { computed, onMounted, useTemplateRef, watch, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useSocket } from '../socket'
+
 const route = useRoute();
-
-onMounted(() => {
-  console.log('here', route.params.key);
-})
-
 const room = route.params.key as string ?? 'default';
-const {state} = useSocket(room)
-
-
+const {state,next} = useSocket(room)
 const player = useTemplateRef('player')
 
 watch(
   () => state.currentMediaChat,
   () => {
     if (state.currentMediaChat && state.currentMediaChat.duration) {
-      console.log('currentMediaChat', state.currentMediaChat)
+      if (MediaIsJustText) toggleShowMedia()
       setTimeout(() => {
         removeMediaChat()
       }, state.currentMediaChat.duration * 1000)
     }
+  },
+)
+watch(
+  () => state.queue,
+  () => {
+    console.log('queue', state.queue)
   },
 )
 
@@ -44,13 +44,24 @@ const MediaIsVideo = computed(() => {
 const MediaIsImage = computed(() => {
   return state.currentMediaChat.media && state.currentMediaChat.media.type === 'image'
 })
+const MediaIsAudio = computed(() => {
+  return state.currentMediaChat.media && state.currentMediaChat.media.type === 'sound'
+})
+const MediaIsJustText = computed(() => {
+  return !state.currentMediaChat.media && state.currentMediaChat.message.length > 0
+})
 const removeMediaChat = () => {
-  state.currentMediaChat = null
-  toggleShowMedia()
+  if (state.queue.length > 0) {
+    next()
+  } else {
+    state.currentMediaChat = null
+    toggleShowMedia()
+  }
 }
 </script>
 
 <template>
+  {{ state.queue }}
   <div
     class="grid grid-rows-[1fr_3fr_1fr] items-start select-none bg-opacity-1 h-screen gap-2 mt-4 w-full px-5 overflow-y-hidden"
     v-if="state.currentMediaChat"
@@ -93,6 +104,15 @@ const removeMediaChat = () => {
         :src="state.currentMediaChat.media.url"
         class="h-full"
       />
+      <audio
+        v-if="MediaIsAudio"
+        autoplay
+        @ended="removeMediaChat"
+        @canplay="toggleShowMedia"
+        class="h-full"
+      >
+        <source :src="state.currentMediaChat.media.url" type="audio/mpeg" />
+      </audio>
     </div>
     <div class="m-auto">
       <p

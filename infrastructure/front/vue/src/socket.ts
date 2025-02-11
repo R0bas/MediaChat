@@ -10,7 +10,6 @@ export function useSocket( roomKey: string) {
 
   const URL = import.meta.env.PROD ? undefined : 'http://localhost:3000'
   const socket = io(URL)
-  console.log(socket)
   socket.on('connect', () => {
     state.connected = true
     socket.emit('join', roomKey)
@@ -20,10 +19,17 @@ export function useSocket( roomKey: string) {
     state.connected = false
   })
 
-  socket.on('mediachat', (...args) => {
-    state.queue.push(args)
-    
+  socket.on('mediachat', (...args) => {   
+    console.log('mediachat', args[0])
+    if (state.queue.length === 0) {
+      state.currentMediaChat = args[0]
+    }
+    else {
+      state.queue.push(args[0])
+    }
+   
   })
+
   onMounted(() => {
     socket.connect()
   })
@@ -32,8 +38,14 @@ export function useSocket( roomKey: string) {
     socket.disconnect()
   })
 
+  const next = () => {
+    console.log('next', state.queue)
+    state.currentMediaChat = state.queue.shift() || null
+  }
+
   return {
     state,
     socket,
+    next,
   }
 }
