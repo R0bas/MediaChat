@@ -4,6 +4,7 @@
   "main": "index.js",
   "scripts": {
     "start": "tsc && node dist/app.js",
+    "dev": "tsc && nodemon dist/app.js",
     "lint": "eslint . --ext .ts"
   },
   "keywords": [],

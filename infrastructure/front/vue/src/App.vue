@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { state } from '@/socket'
-import { computed, onMounted, useTemplateRef, watch, ref } from 'vue'
+import { computed, useTemplateRef, watch, ref } from 'vue'
 import './assets/main.css'
 
 const player = useTemplateRef('player')
@@ -9,8 +9,7 @@ watch(
   () => state.currentMediaChat,
   () => {
     if (state.currentMediaChat && state.currentMediaChat.duration) {
-      if (MediaIsJustText)
-        toggleShowMedia()
+      if (MediaIsJustText) toggleShowMedia()
       console.log('currentMediaChat', state.currentMediaChat)
       setTimeout(() => {
         removeMediaChat()
@@ -36,6 +35,9 @@ const MediaIsVideo = computed(() => {
 })
 const MediaIsImage = computed(() => {
   return state.currentMediaChat.media && state.currentMediaChat.media.type === 'image'
+})
+const MediaIsAudio = computed(() => {
+  return state.currentMediaChat.media && state.currentMediaChat.media.type === 'sound'
 })
 const MediaIsJustText = computed(() => {
   return !state.currentMediaChat.media && state.currentMediaChat.message.length > 0
@@ -89,6 +91,15 @@ const removeMediaChat = () => {
         :src="state.currentMediaChat.media.url"
         class="h-full"
       />
+      <audio
+        v-if="MediaIsAudio"
+        autoplay
+        @ended="removeMediaChat"
+        @canplay="toggleShowMedia"
+        class="h-full"
+      >
+        <source :src="state.currentMediaChat.media.url" type="audio/mpeg" />
+      </audio>
     </div>
     <div class="m-auto">
       <p
