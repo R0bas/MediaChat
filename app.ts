@@ -18,9 +18,14 @@ export const io = new Server(server, {
 configExpress(app);
 client.login(process.env.DISCORD_TOKEN);
 
-io.on("connection", () => {
-  console.info("a user connected");
+io.on("connection", (socket) => {
+  socket.on("join", (room) => {
+    socket.join(room);
+  });
 });
+
+
+
 
 server.listen(port, async() => {
   return console.info(`Express is listening at http://localhost:${port}`);
