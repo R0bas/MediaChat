@@ -1,23 +1,39 @@
-import { reactive } from 'vue'
+import { reactive, onUnmounted, onMounted } from 'vue'
 import { io } from 'socket.io-client'
 
-export const state = reactive({
-  connected: false,
-  currentMediaChat: null,
-})
+export function useSocket( roomKey: string) {
+  const state = reactive({
+    connected: false,
+    currentMediaChat: null,
+    queue: [],
+  })
 
-const URL = import.meta.env.PROD ? undefined : 'http://localhost:3000'
+  const URL = import.meta.env.PROD ? undefined : 'http://localhost:3000'
+  const socket = io(URL)
+  console.log(socket)
+  socket.on('connect', () => {
+    state.connected = true
+    socket.emit('join', roomKey)
+  })
 
-export const socket = io(URL)
+  socket.on('disconnect', () => {
+    state.connected = false
+  })
 
-socket.on('connect', () => {
-  state.connected = true
-})
+  socket.on('mediachat', (...args) => {
+    state.queue.push(args)
+    
+  })
+  onMounted(() => {
+    socket.connect()
+  })
 
-socket.on('disconnect', () => {
-  state.connected = false
-})
+  onUnmounted(() => {
+    socket.disconnect()
+  })
 
-socket.on('mediachat', (...args) => {
-  state.currentMediaChat = args[0]
-})
+  return {
+    state,
+    socket,
+  }
+}
