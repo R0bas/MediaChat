@@ -9,6 +9,8 @@ watch(
   () => state.currentMediaChat,
   () => {
     if (state.currentMediaChat && state.currentMediaChat.duration) {
+      if (MediaIsJustText)
+        toggleShowMedia()
       console.log('currentMediaChat', state.currentMediaChat)
       setTimeout(() => {
         removeMediaChat()
@@ -34,6 +36,9 @@ const MediaIsVideo = computed(() => {
 })
 const MediaIsImage = computed(() => {
   return state.currentMediaChat.media && state.currentMediaChat.media.type === 'image'
+})
+const MediaIsJustText = computed(() => {
+  return !state.currentMediaChat.media && state.currentMediaChat.message.length > 0
 })
 const removeMediaChat = () => {
   state.currentMediaChat = null
