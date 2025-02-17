@@ -24,9 +24,6 @@ io.on("connection", (socket) => {
   });
 });
 
-
-
-
 server.listen(port, async() => {
   return console.info(`Express is listening at http://localhost:${port}`);
 });

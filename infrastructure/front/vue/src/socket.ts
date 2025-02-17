@@ -1,15 +1,30 @@
-import { reactive, onUnmounted, onMounted } from 'vue'
+import { reactive, onUnmounted, onMounted, ref } from 'vue'
 import { io } from 'socket.io-client'
 
-export function useSocket( roomKey: string) {
+export function useSocket(roomKey: string) {
+  const queue = ref([])
   const state = reactive({
     connected: false,
     currentMediaChat: null,
-    queue: [],
   })
 
   const URL = import.meta.env.PROD ? undefined : 'http://localhost:3000'
   const socket = io(URL)
+
+  const getNextMessage = async () => {
+    if (queue.value.length === 0) {
+      return
+    }
+    if (queue.value.length === 1) {
+      state.currentMediaChat = null
+      queue.value = []
+    }
+    else {
+      state.currentMediaChat = queue.value[1]
+      queue.value = queue.value.slice(1)
+    }
+  }
+
   socket.on('connect', () => {
     state.connected = true
     socket.emit('join', roomKey)
@@ -19,15 +34,11 @@ export function useSocket( roomKey: string) {
     state.connected = false
   })
 
-  socket.on('mediachat', (...args) => {   
-    console.log('mediachat', args[0])
-    if (state.queue.length === 0) {
+  socket.on('mediachat', (...args) => {
+    if (queue.value.length === 0) {
       state.currentMediaChat = args[0]
     }
-    else {
-      state.queue.push(args[0])
-    }
-   
+    queue.value.push(args[0])
   })
 
   onMounted(() => {
@@ -38,14 +49,10 @@ export function useSocket( roomKey: string) {
     socket.disconnect()
   })
 
-  const next = () => {
-    console.log('next', state.queue)
-    state.currentMediaChat = state.queue.shift() || null
-  }
-
   return {
     state,
+    queue,
     socket,
-    next,
+    getNextMessage,
   }
 }
