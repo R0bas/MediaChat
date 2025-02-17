@@ -41,6 +41,16 @@ export function useSocket(roomKey: string) {
     queue.value.push(args[0])
   })
 
+  socket.on('flush', () => {
+    queue.value = []
+    state.currentMediaChat = null
+    console.log('flushed')
+  })
+
+  socket.on('skip', () => {
+    getNextMessage()
+  })
+
   onMounted(() => {
     socket.connect()
   })
