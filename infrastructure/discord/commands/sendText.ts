@@ -58,6 +58,7 @@ export const execute = async (interaction: ChatInputCommandInteraction) => {
       fontSize: interaction.options.getString("font_size") || 24,
       fontFamily: interaction.options.getString("font") || "Arial",
     },
+    target: interaction.options.getUser("user")?.username || "all",
   } as MediachatOptions;
   const sendMediaChat = new SendMediaChat(io);
   const createMediaChat = new CreateMediaChat(sendMediaChat);

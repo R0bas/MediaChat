@@ -1,6 +1,5 @@
 import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
 import { Media } from "../../../domain/entities/Media";
-import { getFileContentType } from "../utils";
 import {
   MediachatOptions,
   PositionX,
@@ -10,13 +9,14 @@ import { SendMediaChat } from "../../socket/SendMediaChat";
 import { CreateMediaChat } from "../../../application/usecases/CreateMediaChat";
 import { io } from "../../../app";
 import { Author } from "../../../domain/entities/Author";
+import youtubeDl, { Payload } from "youtube-dl-exec";
 
 export const data = new SlashCommandBuilder()
-  .setName("sendfile")
-  .setDescription("Send a file to the channel")
-  .addAttachmentOption((option) =>
-    option.setRequired(true).setName("file").setDescription("File to send")
-  )
+  .setName("sendurl")
+  .setDescription("Send a url")
+    .addStringOption((option) =>
+        option.setName("url").setDescription("Url to send")
+    )
   .addStringOption((option) =>
     option.setName("positionx").setDescription("left / center / right")
   )
@@ -52,17 +52,26 @@ export const data = new SlashCommandBuilder()
   );
 
 export const execute = async (interaction: ChatInputCommandInteraction) => {
-  const file = interaction.options.getAttachment("file");
+  const url = interaction.options.getString("url");
 
-  if (!file) {
-    await interaction.reply("No file provided.");
+  if (!url) {
+    await interaction.reply("No url provided.");
     return;
   }
-
+  interaction.deferReply();
+  const test =await youtubeDl(url, {
+    dumpSingleJson: true,
+    noCheckCertificates: true,
+    noWarnings: true,
+    preferFreeFormats: true,
+    addHeader: ["referer:youtube.com", "user-agent:googlebot"],
+    format: "best[ext=mp4]",
+  }) as Payload;
+const requestedDownload = test.requested_downloads[0] as Record<string, unknown>;
   const media: Media = {
-    type: getFileContentType(file.contentType || ""),
-    url: file.url,
-    id: file.id,
+    type: "video",
+    url: requestedDownload.url as string,
+    id: url,
   };
 
   const mediaChatOptions: MediachatOptions = {
@@ -103,10 +112,10 @@ export const execute = async (interaction: ChatInputCommandInteraction) => {
       interaction.options.getString("text") || "",
       mediaChatOptions
     );
-    await interaction.reply("Media sent.");
+    await interaction.editReply("Media sent.");
   }
     catch (error) {
         console.error(error);
-        await interaction.reply("An error occurred.");
+        await interaction.editReply("An error occurred.");
     }
 };

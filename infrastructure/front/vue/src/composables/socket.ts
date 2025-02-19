@@ -1,4 +1,4 @@
-import { reactive, onUnmounted, onMounted, ref } from 'vue'
+import { reactive, onUnmounted, onMounted, ref, type MaybeRefOrGetter, type MaybeRef, unref } from 'vue'
 import { io } from 'socket.io-client'
 
 export function useSocket(roomKey: string) {
@@ -26,6 +26,7 @@ export function useSocket(roomKey: string) {
   }
 
   socket.on('connect', () => {
+    console.log('connected')
     state.connected = true
     socket.emit('join', roomKey)
   })
@@ -35,16 +36,16 @@ export function useSocket(roomKey: string) {
   })
 
   socket.on('mediachat', (...args) => {
+    console.log('mediachat', args)
     if (queue.value.length === 0) {
       state.currentMediaChat = args[0]
     }
-    queue.value.push(args[0])
+    queue.value.push(args[0]) 
   })
 
   socket.on('flush', () => {
     queue.value = []
     state.currentMediaChat = null
-    console.log('flushed')
   })
 
   socket.on('skip', () => {

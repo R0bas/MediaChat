@@ -1,20 +1,22 @@
 <script setup lang="ts">
-import { computed, onMounted, useTemplateRef, watch, ref } from 'vue'
+import { computed, useTemplateRef, watch, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { useSocket } from '../socket'
+import { useSocket } from '../composables/socket'
 
 const route = useRoute();
 const room = route.params.key as string ?? 'default';
+const timeoutId = ref(0)
+
 const { state, queue, getNextMessage } = useSocket(room)
 const player = useTemplateRef('player')
-
+const showMediachat = ref(false)
 watch(
   () => state.currentMediaChat,
   () => {
     console.log('currentMediaChat', state.currentMediaChat)
     if (state.currentMediaChat && state.currentMediaChat.duration) {
       if (MediaIsJustText) toggleShowMedia()
-      setTimeout(async() => {
+      timeoutId.value = setTimeout(async() => {
         await removeMediaChat()
       }, state.currentMediaChat.duration * 1000)
     }
@@ -28,7 +30,6 @@ const playVideo = () => {
   }
 }
 
-let showMediachat = ref(false)
 const toggleShowMedia = () => {
   showMediachat.value = !showMediachat.value
 }
@@ -45,6 +46,7 @@ const MediaIsAudio = computed(() => {
 const MediaIsJustText = computed(() => {
   return !state.currentMediaChat.media && state.currentMediaChat.message.length > 0
 })
+
 const removeMediaChat = async() => {
   await getNextMessage() 
   toggleShowMedia()  

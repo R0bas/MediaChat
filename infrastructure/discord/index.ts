@@ -4,6 +4,8 @@ import {
   Events,
   GatewayIntentBits,
   MessageFlags,
+  REST,
+  Routes,
   SlashCommandBuilder,
 } from "discord.js";
 import path from "path";
@@ -44,12 +46,27 @@ const commandFolders = fs
     }
   }
 })();
+const deployCommands = async () => {
+  const commands = client.commands.map((command) => command.data.toJSON());
+  if (!process.env.DISCORD_TOKEN || !process.env.DISCORD_CLIENT_ID || !process.env.DISCORD_GUILD_ID) {
+    throw new Error("No Discord token, client ID, or guild ID found in environment variables.");
+  }
+  const rest = new REST({ version: "10" }).setToken(process.env.DISCORD_TOKEN); await rest.put(
+  Routes.applicationGuildCommands(
+    process.env.DISCORD_CLIENT_ID,
+    process.env.DISCORD_GUILD_ID
+  ),
+  { body: commands }
+);
 
+};
 client.once(Events.ClientReady, (readyClient) => {
+   deployCommands();
   console.log(`Ready! Logged in as ${readyClient.user.tag}`);
 });
 
 client.on(Events.InteractionCreate, async (interaction) => {
+  console.log(interaction);
   if (!interaction.isChatInputCommand()) return;
   const command = (interaction.client as ClientWithCommands).commands.get(
     interaction.commandName

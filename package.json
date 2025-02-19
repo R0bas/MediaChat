@@ -5,7 +5,8 @@
   "scripts": {
     "start": "tsc && node dist/app.js",
     "dev": "tsc && nodemon dist/app.js",
-    "lint": "eslint . --ext .ts"
+    "lint": "eslint . --ext .ts",
+    "build" : "tsc"
   },
   "keywords": [],
   "author": "",

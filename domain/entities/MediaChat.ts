@@ -20,7 +20,8 @@ export interface MediachatOptions {
     fontSize: number;
     fontFamily: string;
   };
-  hideAuthor: boolean;
+  hideAuthor?: boolean;
+  target?: string;
 }
 
 export class Mediachat {
@@ -31,19 +32,12 @@ export class Mediachat {
     public readonly message?: string,
     public readonly media?: Media,
     public readonly options?: MediachatOptions,
-    public readonly target?: string,
     public readonly createdAt: Date = new Date()
   ) {
     validateMediaChat(this);
     this.id = id;
     this.author = author;
     this.duration = duration;
-    if (!target) {
-      this.target = "all";
-    }
-    if (target) {
-      this.target = target;
-    }
     if (message) {
       this.message = message;
     }
@@ -64,6 +58,7 @@ export class Mediachat {
           fontFamily: "Arial",
         },
         hideAuthor: false,
+        target: "all",
       };
     }
     if (options) {

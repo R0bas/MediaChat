@@ -3,12 +3,12 @@ import { Server } from "socket.io";
 import http from "http";
 import configExpress from "./infrastructure/express/config";
 import client from "./infrastructure/discord";
-import 'dotenv/config'
+import dotenv from 'dotenv';
 
 const app = express();
 const port = 3000;
 const server = http.createServer(app);
-
+dotenv.config();
 export const io = new Server(server, {
   cors: {
     origin: "*",
