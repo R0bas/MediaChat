@@ -12,10 +12,12 @@ export function useSocket(roomKey: string) {
   const socket = io(URL)
 
   const getNextMessage = async () => {
+    console.log(queue.value.length);
     if (queue.value.length === 0) {
       return
     }
     if (queue.value.length === 1) {
+      // FLUSH EQUIVALENT
       state.currentMediaChat = null
       queue.value = []
     }

@@ -48,6 +48,7 @@ const MediaIsJustText = computed(() => {
 })
 
 const removeMediaChat = async() => {
+  console.log("remove");
   await getNextMessage() 
   toggleShowMedia()  
 }
