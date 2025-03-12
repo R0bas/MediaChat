@@ -9,11 +9,13 @@ const timeoutId = ref(0)
 
 const { state, queue, getNextMessage } = useSocket(room)
 const player = useTemplateRef('player')
+const playerKey = ref(0)
 const showMediachat = ref(false)
+
+
 watch(
   () => state.currentMediaChat,
   () => {
-    console.log('currentMediaChat', state.currentMediaChat)
     if (state.currentMediaChat && state.currentMediaChat.duration) {
       if (MediaIsJustText) toggleShowMedia()
       timeoutId.value = setTimeout(async() => {
@@ -48,9 +50,9 @@ const MediaIsJustText = computed(() => {
 })
 
 const removeMediaChat = async() => {
-  console.log("remove");
-  await getNextMessage() 
-  toggleShowMedia()  
+  if (MediaIsVideo) playerKey.value++
+  await getNextMessage()
+  toggleShowMedia()
 }
 </script>
 
@@ -66,7 +68,7 @@ const removeMediaChat = async() => {
       </h2>
     </div>
     <div class="m-auto max-h-[78vh] h-full">
-      <video v-if="MediaIsVideo" @ended="removeMediaChat" @canplay="playVideo" ref="player" class="h-full" autoplay>
+      <video :key="playerKey" v-if="MediaIsVideo" @ended="removeMediaChat" @canplay="playVideo" ref="player" class="h-full" autoplay>
         <source :src="state.currentMediaChat.media.url" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
