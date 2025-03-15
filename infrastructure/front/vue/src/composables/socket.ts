@@ -8,11 +8,11 @@ export function useSocket(roomKey: string) {
     currentMediaChat: null,
   })
 
-  const URL = import.meta.env.PROD ? undefined : 'http://localhost:3000'
+  const URL = /*import.meta.env.PROD ? undefined : */'http://localhost:3000'
+  console.log("URL = "+URL);
   const socket = io(URL)
 
   const getNextMessage = async () => {
-    console.log(queue.value.length);
     if (queue.value.length === 0) {
       return
     }
@@ -38,7 +38,6 @@ export function useSocket(roomKey: string) {
   })
 
   socket.on('mediachat', (...args) => {
-    console.log('mediachat', args)
     if (queue.value.length === 0) {
       state.currentMediaChat = args[0]
     }
