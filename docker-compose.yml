@@ -1,7 +1,9 @@
 services:
   backend:
     build:
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: infrastructure/express/Dockerfile
+      target: production
     environment:
       - NODE_ENV=production
       - DISCORD_GUILD_ID={DISCORD_GUILD_ID}
@@ -9,14 +11,15 @@ services:
       - DISCORD_TOKEN={DISCORD_TOKEN}
     env_file:
       - .env      
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
-    command: npm run start
+    # volumes:
+    #   - .:/usr/src/app
+    #   - /usr/src/app/node_modules
+    # command: npm run start
 
   frontend:
     build:
-      dockerfile: ./infrastructure/front/vue/Dockerfile
+      context: ./infrastructure/front/vue
+      dockerfile: Dockerfile
       target: production
     environment:
       - VITE_API_URL={BACKEND_URL}

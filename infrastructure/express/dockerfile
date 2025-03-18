@@ -1,16 +1,42 @@
-# Build stage
-FROM node:18-alpine as build
+# Development stage
+FROM node:20-alpine as development
 
 WORKDIR /usr/src/app
 
 # Install python and other dependencies required for youtube-dl-exec
 RUN apk add --no-cache python3 make g++ gcc
 
-COPY ../../package*.json ./
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy source
+COPY . .
+
+# Build TypeScript
+RUN npm run build
+
+# Expose API port
+EXPOSE 3000
+
+# Start development server with nodemon
+CMD ["npm", "run", "dev"]
+
+# Build stage
+FROM node:20-alpine as build
+
+WORKDIR /usr/src/app
+
+# Install python and other dependencies required for youtube-dl-exec
+RUN apk add --no-cache python3 make g++ gcc
+
+COPY package*.json ./
 
 RUN npm install
 
-COPY ../../. .
+COPY . .
 
 RUN npm run build
 
@@ -23,7 +49,7 @@ WORKDIR /usr/src/app
 RUN apk add --no-cache python3
 
 # Copy package files
-COPY ../../package*.json ./
+COPY package*.json ./
 
 # Install production dependencies only
 RUN npm install --production
