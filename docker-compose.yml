@@ -6,15 +6,11 @@ services:
       target: production
     environment:
       - NODE_ENV=production
-      - DISCORD_GUILD_ID={DISCORD_GUILD_ID}
-      - DISCORD_CLIENT_ID={DISCORD_CLIENT_ID}
-      - DISCORD_TOKEN={DISCORD_TOKEN}
+      - DISCORD_GUILD_ID=${DISCORD_GUILD_ID}
+      - DISCORD_CLIENT_ID=${DISCORD_CLIENT_ID}
+      - DISCORD_TOKEN=${DISCORD_TOKEN}
     env_file:
       - .env      
-    # volumes:
-    #   - .:/usr/src/app
-    #   - /usr/src/app/node_modules
-    # command: npm run start
 
   frontend:
     build:
@@ -22,6 +18,6 @@ services:
       dockerfile: Dockerfile
       target: production
     environment:
-      - VITE_API_URL={BACKEND_URL}
+      - VITE_API_URL=${BACKEND_URL}
     depends_on:
       - backend
