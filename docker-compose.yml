@@ -4,10 +4,11 @@ services:
       context: .
       dockerfile: infrastructure/express/Dockerfile
       target: production
-    ports:
-      - "3000:3000"
     environment:
       - NODE_ENV=production
+      - DISCORD_GUILD_ID={DISCORD_GUILD_ID}
+      - DISCORD_CLIENT_ID={DISCORD_CLIENT_ID}
+      - DISCORD_TOKEN={DISCORD_TOKEN}
     env_file:
       - .env      
     volumes:
@@ -20,9 +21,6 @@ services:
       context: ./infrastructure/front/vue
       dockerfile: Dockerfile
       target: production
-    ports:
-      - "80:80"
-      - "5173:5173"
     environment:
       - VITE_API_URL={BACKEND_URL}
     depends_on:
