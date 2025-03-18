@@ -1,9 +1,7 @@
 services:
   backend:
     build:
-      context: .
       dockerfile: Dockerfile
-      target: production
     environment:
       - NODE_ENV=production
       - DISCORD_GUILD_ID={DISCORD_GUILD_ID}
@@ -18,8 +16,7 @@ services:
 
   frontend:
     build:
-      context: ./infrastructure/front/vue
-      dockerfile: Dockerfile
+      dockerfile: ./infrastructure/front/vueDockerfile
       target: production
     environment:
       - VITE_API_URL={BACKEND_URL}
