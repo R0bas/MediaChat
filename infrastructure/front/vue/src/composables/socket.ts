@@ -8,7 +8,7 @@ export function useSocket(roomKey: string) {
     currentMediaChat: null,
   })
 
-  const URL = import.meta.env.VITE_API_URL;
+  const URL = "http://q0g4sgow8c040ookw80g0ogg.54.36.101.56.sslip.io";
   console.log("URL = "+URL);
   const socket = io(URL)
 
