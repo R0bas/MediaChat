@@ -6,7 +6,7 @@
     "start": "node dist/app.js",
     "dev": "tsc && nodemon dist/app.js",
     "lint": "eslint . --ext .ts",
-    "build" : "tsc"
+    "build" : "npx tsc"
   },
   "keywords": [],
   "author": "",

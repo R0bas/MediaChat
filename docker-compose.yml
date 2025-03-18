@@ -14,8 +14,6 @@ services:
       - .:/usr/src/app
       - /usr/src/app/node_modules
     command: npm run start
-    networks:
-      - app-network
 
   frontend:
     build:
@@ -29,9 +27,3 @@ services:
       - VITE_API_URL=http://localhost:3000
     depends_on:
       - backend
-    networks:
-      - app-network
- 
-networks:
-  app-network:
-    driver: bridge
