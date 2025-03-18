@@ -1,0 +1,37 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: infrastructure/express/Dockerfile
+      target: production
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    env_file:
+      - .env      
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    command: npm run start
+    networks:
+      - app-network
+
+  frontend:
+    build:
+      context: ./infrastructure/front/vue
+      dockerfile: Dockerfile
+      target: production
+    ports:
+      - "80:80"
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=http://localhost:3000
+    depends_on:
+      - backend
+    networks:
+      - app-network
+ 
+networks:
+  app-network:
+    driver: bridge
