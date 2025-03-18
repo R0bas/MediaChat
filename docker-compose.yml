@@ -2,7 +2,7 @@ services:
   backend:
     build:
       context: .
-      dockerfile: infrastructure/express/Dockerfile
+      dockerfile: Dockerfile
       target: production
     environment:
       - NODE_ENV=production
