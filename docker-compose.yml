@@ -4,26 +4,20 @@ services:
       context: .
       dockerfile: infrastructure/express/Dockerfile
       target: production
-    ports:
-      - "3000:3000"
     environment:
       - NODE_ENV=production
+      - DISCORD_GUILD_ID=${DISCORD_GUILD_ID}
+      - DISCORD_CLIENT_ID=${DISCORD_CLIENT_ID}
+      - DISCORD_TOKEN=${DISCORD_TOKEN}
     env_file:
       - .env      
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
-    command: npm run start
 
   frontend:
     build:
       context: ./infrastructure/front/vue
       dockerfile: Dockerfile
       target: production
-    ports:
-      - "80:80"
-      - "5173:5173"
     environment:
-      - VITE_API_URL=http://localhost:3000
+      - VITE_API_URL=${BACKEND_URL}
     depends_on:
       - backend
