@@ -1,0 +1,27 @@
+name: Create PR to Forked master
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  create-pull-request:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo code
+        uses: actions/checkout@v3
+      - name: Set up Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          head-branch: master
+          base-branch: master
+          base-repository: ProbablyClem/MediaChat
+          title: "Automated PR from master"
+          body: "This PR was automatically created from a push to the R0bas/MediaChat/master branch"
+          labels: automated, pr

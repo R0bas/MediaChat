@@ -10,12 +10,13 @@ import { CreateMediaChat } from "../../../application/usecases/CreateMediaChat";
 import { io } from "../../../app";
 import { Author } from "../../../domain/entities/Author";
 import youtubeDl, { Payload } from "youtube-dl-exec";
+import { formatReply } from "../utils";
 
 export const data = new SlashCommandBuilder()
   .setName("sendurl")
   .setDescription("Send a url")
-    .addStringOption((option) =>
-        option.setName("url").setDescription("Url to send")
+  .addStringOption((option) =>
+    option.setRequired(true).setName("url").setDescription("Url to send")
     )
   .addStringOption((option) =>
     option.setName("positionx").setDescription("left / center / right")
@@ -92,6 +93,7 @@ const requestedDownload = test.requested_downloads[0] as Record<string, unknown>
     },
     hideAuthor: interaction.options.getBoolean("anonymous") || false,
     target: interaction.options.getUser("user")?.username || "all",
+    target_id: interaction.options.getUser("user")?.id || "",
   };
   const sendMediaChat = new SendMediaChat(io);
   const createMediaChat = new CreateMediaChat(sendMediaChat);
@@ -112,7 +114,14 @@ const requestedDownload = test.requested_downloads[0] as Record<string, unknown>
       interaction.options.getString("text") || "",
       mediaChatOptions
     );
-    await interaction.editReply("Media sent.");
+    await interaction.editReply(
+      formatReply(
+        author,
+        mediaChatOptions,
+        interaction.options.getString("text"),
+        interaction.options.getString("url")
+      )
+    );
   }
     catch (error) {
         console.error(error);

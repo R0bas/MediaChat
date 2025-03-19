@@ -1,7 +1,6 @@
 import { Author } from "./Author";
 import { Media } from "./Media";
 
-
 export interface PositionX {
   positionX: "left" | "center" | "right";
 }
@@ -22,6 +21,7 @@ export interface MediachatOptions {
   };
   hideAuthor?: boolean;
   target?: string;
+  target_id?: string;
 }
 
 export class Mediachat {
