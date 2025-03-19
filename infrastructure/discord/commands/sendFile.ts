@@ -1,6 +1,6 @@
 import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
 import { Media } from "../../../domain/entities/Media";
-import { getFileContentType } from "../utils";
+import { formatReply, getFileContentType } from "../utils";
 import {
   MediachatOptions,
   PositionX,
@@ -83,6 +83,7 @@ export const execute = async (interaction: ChatInputCommandInteraction) => {
     },
     hideAuthor: interaction.options.getBoolean("anonymous") || false,
     target: interaction.options.getUser("user")?.username || "all",
+    target_id: interaction.options.getUser("user")?.id || "",
   };
   const sendMediaChat = new SendMediaChat(io);
   const createMediaChat = new CreateMediaChat(sendMediaChat);
@@ -104,15 +105,12 @@ export const execute = async (interaction: ChatInputCommandInteraction) => {
       mediaChatOptions
     );
     await interaction.reply(
-      `<@${author.id}> sent ${media.url} to ${
-        mediaChatOptions.target === "all"
-          ? "**everyone**"
-          : `<@${interaction.options.getUser("user")?.id}>`
-      } ${
-        interaction.options.getString("text")
-          ? "with the caption \`\`\`"+interaction.options.getString("text")+"\`\`\`"
-          : ""
-      }`
+      formatReply(
+        author,
+        mediaChatOptions,
+        interaction.options.getString("text"),
+        media.url
+      )
     );
   } catch (error) {
     console.error(error);
