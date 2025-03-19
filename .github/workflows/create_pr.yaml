@@ -19,9 +19,9 @@ jobs:
         uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          head-branch: master
-          base-branch: master
-          base-repository: ProbablyClem/MediaChat
+          branch: master
+          base: master
+          push-to-fork: ProbablyClem/MediaChat
           title: "Automated PR from master"
           body: "This PR was automatically created from a push to the R0bas/MediaChat/master branch"
           labels: automated, pr
