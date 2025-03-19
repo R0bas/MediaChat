@@ -70,9 +70,9 @@ export const execute = async (interaction: ChatInputCommandInteraction) => {
       mediaChatOptions
     );
     await interaction.reply(
-      `<@${author.id}> a envoyé \`\`${text}\`\` à ${
+      `<@${author.id}> sent \`\`${text}\`\` to ${
         mediaChatOptions.target === "all"
-          ? "tout le monde"
+          ? "everyone"
           : `<@${interaction.options.getUser("user")?.id}>`
       }`
     );
