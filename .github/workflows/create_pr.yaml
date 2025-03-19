@@ -11,10 +11,6 @@ jobs:
     steps:
       - name: Checkout repo code
         uses: actions/checkout@v3
-      - name: Set up Git
-        run: |
-          git config user.name "R0bas"
-          git config user.email "196313967+R0bas@users.noreply.github.com"
       - name: Create Pull Request
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
