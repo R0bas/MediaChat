@@ -95,18 +95,27 @@ export const execute = async (interaction: ChatInputCommandInteraction) => {
   if (!duration && media.type === "image") {
     duration = 5;
   }
- try {
-   await createMediaChat.execute(
+  try {
+    await createMediaChat.execute(
       author,
       duration,
       media,
       interaction.options.getString("text") || "",
       mediaChatOptions
     );
-    await interaction.reply("Media sent.");
+    await interaction.reply(
+      `<@${author.id}> sent ${media.url} to ${
+        mediaChatOptions.target === "all"
+          ? "**everyone**"
+          : `<@${interaction.options.getUser("user")?.id}>`
+      } ${
+        interaction.options.getString("text")
+          ? "with the caption \`\`\`"+interaction.options.getString("text")+"\`\`\`"
+          : ""
+      }`
+    );
+  } catch (error) {
+    console.error(error);
+    await interaction.reply("An error occurred.");
   }
-    catch (error) {
-        console.error(error);
-        await interaction.reply("An error occurred.");
-    }
 };

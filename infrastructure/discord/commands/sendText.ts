@@ -70,11 +70,11 @@ export const execute = async (interaction: ChatInputCommandInteraction) => {
       mediaChatOptions
     );
     await interaction.reply(
-      `<@${author.id}> sent \`\`${text}\`\` to ${
+      `<@${author.id}> sent to ${
         mediaChatOptions.target === "all"
-          ? "everyone"
+          ? "**everyone**"
           : `<@${interaction.options.getUser("user")?.id}>`
-      }`
+      } \`\`\`${text}\`\`\``
     );
   } catch (error) {
     console.error(error);

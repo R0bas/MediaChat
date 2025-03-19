@@ -112,7 +112,19 @@ const requestedDownload = test.requested_downloads[0] as Record<string, unknown>
       interaction.options.getString("text") || "",
       mediaChatOptions
     );
-    await interaction.editReply("Media sent.");
+    await interaction.editReply(
+      `<@${author.id}> sent ${url} to ${
+        mediaChatOptions.target === "all"
+          ? "**everyone**"
+          : `<@${interaction.options.getUser("user")?.id}>`
+      } ${
+        interaction.options.getString("text")
+          ? "with the caption ```" +
+            interaction.options.getString("text") +
+            "```"
+          : ""
+      }`
+    );
   }
     catch (error) {
         console.error(error);
