@@ -41,7 +41,6 @@ export const execute = async (interaction: ChatInputCommandInteraction) => {
     return;
   }
 
-
   const author: Author = {
     id: interaction.user.id,
     name: interaction.user.username,
@@ -70,7 +69,13 @@ export const execute = async (interaction: ChatInputCommandInteraction) => {
       interaction.options.getString("text") || "",
       mediaChatOptions
     );
-    await interaction.reply("Text sent.");
+    await interaction.reply(
+      `<@${author.id}> a envoyé \`\`${text}\`\` à ${
+        mediaChatOptions.target === "all"
+          ? "tout le monde"
+          : `<@${interaction.options.getUser("user")?.id}>`
+      }`
+    );
   } catch (error) {
     console.error(error);
     await interaction.reply("An error occurred.");
