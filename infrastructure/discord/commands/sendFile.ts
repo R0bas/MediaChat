@@ -1,6 +1,6 @@
 import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
 import { Media } from "../../../domain/entities/Media";
-import { getFileContentType } from "../utils";
+import { formatReply, getFileContentType } from "../utils";
 import {
   MediachatOptions,
   PositionX,
@@ -83,6 +83,7 @@ export const execute = async (interaction: ChatInputCommandInteraction) => {
     },
     hideAuthor: interaction.options.getBoolean("anonymous") || false,
     target: interaction.options.getUser("user")?.username || "all",
+    target_id: interaction.options.getUser("user")?.id || "",
   };
   const sendMediaChat = new SendMediaChat(io);
   const createMediaChat = new CreateMediaChat(sendMediaChat);
@@ -95,18 +96,24 @@ export const execute = async (interaction: ChatInputCommandInteraction) => {
   if (!duration && media.type === "image") {
     duration = 5;
   }
- try {
-   await createMediaChat.execute(
+  try {
+    await createMediaChat.execute(
       author,
       duration,
       media,
       interaction.options.getString("text") || "",
       mediaChatOptions
     );
-    await interaction.reply("Media sent.");
+    await interaction.reply(
+      formatReply(
+        author,
+        mediaChatOptions,
+        interaction.options.getString("text"),
+        media.url
+      )
+    );
+  } catch (error) {
+    console.error(error);
+    await interaction.reply("An error occurred.");
   }
-    catch (error) {
-        console.error(error);
-        await interaction.reply("An error occurred.");
-    }
 };

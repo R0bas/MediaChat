@@ -1,0 +1,27 @@
+name: Create PR to Forked master
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  create-pull-request:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo code
+        uses: actions/checkout@v3
+      - name: Create Pull Request
+        env:
+          GITHUB_TOKEN: ${{ secrets.FORK_TOKEN }}
+        run: |
+          curl -X POST \
+            -H "Authorization: token $GITHUB_TOKEN" \
+            -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/ProbablyClem/MediaChat/pulls \
+            -d '{
+              "title": "Automated PR from R0bas:master",
+              "head": "R0bas:master",
+              "base": "master",
+              "body": "This PR was automatically created from a push on the R0bas:master branch"
+            }'

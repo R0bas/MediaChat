@@ -8,6 +8,7 @@ import {
   PositionX,
   PositionY,
 } from "../../../domain/entities/MediaChat";
+import { formatReply } from "../utils";
 
 export const data = new SlashCommandBuilder()
   .setName("sendtext")
@@ -41,7 +42,6 @@ export const execute = async (interaction: ChatInputCommandInteraction) => {
     return;
   }
 
-
   const author: Author = {
     id: interaction.user.id,
     name: interaction.user.username,
@@ -59,6 +59,7 @@ export const execute = async (interaction: ChatInputCommandInteraction) => {
       fontFamily: interaction.options.getString("font") || "Arial",
     },
     target: interaction.options.getUser("user")?.username || "all",
+    target_id: interaction.options.getUser("user")?.id || ""
   } as MediachatOptions;
   const sendMediaChat = new SendMediaChat(io);
   const createMediaChat = new CreateMediaChat(sendMediaChat);
@@ -70,7 +71,7 @@ export const execute = async (interaction: ChatInputCommandInteraction) => {
       interaction.options.getString("text") || "",
       mediaChatOptions
     );
-    await interaction.reply("Text sent.");
+    await interaction.reply(formatReply(author, mediaChatOptions, text, null));
   } catch (error) {
     console.error(error);
     await interaction.reply("An error occurred.");
