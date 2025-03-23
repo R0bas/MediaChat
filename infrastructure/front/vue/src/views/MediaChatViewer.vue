@@ -17,7 +17,7 @@ watch(
   () => state.currentMediaChat,
   () => {
     if (state.currentMediaChat && state.currentMediaChat.duration) {
-      if (MediaIsJustText) toggleShowMedia()
+      if (MediaIsJustText) toggleShowMedia(true)
       timeoutId.value = setTimeout(async() => {
         await removeMediaChat()
       }, state.currentMediaChat.duration * 1000)
@@ -27,13 +27,21 @@ watch(
 
 const playVideo = () => {
   if (player.value) {
-    toggleShowMedia()
+    toggleShowMedia(true)
     player.value.play()
   }
 }
 
-const toggleShowMedia = () => {
-  showMediachat.value = !showMediachat.value
+const toggleShowMedia = (bool: boolean) => {
+  showMediachat.value = bool || !showMediachat.value
+}
+
+const showMedia = () => {
+  toggleShowMedia(true);
+}
+
+const hideMedia = () => {
+  toggleShowMedia(false);
 }
 
 const MediaIsVideo = computed(() => {
@@ -52,7 +60,7 @@ const MediaIsJustText = computed(() => {
 const removeMediaChat = async() => {
   if (MediaIsVideo) playerKey.value++
   await getNextMessage()
-  toggleShowMedia()
+  toggleShowMedia(false)
 }
 </script>
 
@@ -73,9 +81,9 @@ const removeMediaChat = async() => {
         Your browser does not support the video tag.
       </video>
       <img v-if="MediaIsImage" :src="state.currentMediaChat.media.url" alt="mediachat" class="h-full hidden"
-        @load="toggleShowMedia" />
+        @load="showMedia" />
       <img v-if="MediaIsImage && showMediachat" :src="state.currentMediaChat.media.url" class="h-full" />
-      <audio v-if="MediaIsAudio" autoplay @ended="removeMediaChat" @canplay="toggleShowMedia" class="h-full">
+      <audio v-if="MediaIsAudio" autoplay @ended="removeMediaChat" @canplay="showMedia" class="h-full">
         <source :src="state.currentMediaChat.media.url" type="audio/mpeg" />
       </audio>
     </div>
