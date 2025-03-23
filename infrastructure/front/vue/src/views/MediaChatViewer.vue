@@ -67,7 +67,7 @@ const removeMediaChat = async() => {
       </video>
       <img v-if="MediaIsImage" :src="state.currentMediaChat.media.url" alt="mediachat" class="h-full hidden"
          />
-      <img v-if="MediaIsImage " :src="state.currentMediaChat.media.url" class="h-full" />
+      <img v-if="MediaIsImage" :src="state.currentMediaChat.media.url" class="h-full" />
       <audio v-if="MediaIsAudio" autoplay @ended="removeMediaChat" class="h-full">
         <source :src="state.currentMediaChat.media.url" type="audio/mpeg" />
       </audio>
