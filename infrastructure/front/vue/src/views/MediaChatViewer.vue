@@ -10,14 +10,12 @@ const timeoutId = ref(0)
 const { state, queue, getNextMessage } = useSocket(room)
 const player = useTemplateRef('player')
 const playerKey = ref(0)
-const showMediachat = ref(false)
 
 
 watch(
   () => state.currentMediaChat,
   () => {
     if (state.currentMediaChat && state.currentMediaChat.duration) {
-      if (MediaIsJustText) toggleShowMedia()
       timeoutId.value = setTimeout(async() => {
         await removeMediaChat()
       }, state.currentMediaChat.duration * 1000)
@@ -27,14 +25,10 @@ watch(
 
 const playVideo = () => {
   if (player.value) {
-    toggleShowMedia()
     player.value.play()
   }
 }
 
-const toggleShowMedia = () => {
-  showMediachat.value = !showMediachat.value
-}
 
 const MediaIsVideo = computed(() => {
   return state.currentMediaChat.media && state.currentMediaChat.media.type === 'video'
@@ -52,7 +46,6 @@ const MediaIsJustText = computed(() => {
 const removeMediaChat = async() => {
   if (MediaIsVideo) playerKey.value++
   await getNextMessage()
-  toggleShowMedia()
 }
 </script>
 
@@ -60,7 +53,7 @@ const removeMediaChat = async() => {
   <div
     class="grid grid-rows-[1fr_3fr_1fr] items-start select-none bg-opacity-1 h-screen gap-2 mt-4 w-full px-5 overflow-y-hidden"
     v-if="state.currentMediaChat">
-    <div v-if="!state.currentMediaChat.options.hideAuthor && showMediachat" id="avatar"
+    <div v-if="!state.currentMediaChat.options.hideAuthor" id="avatar"
       class="flex flex-col justify-between items-center floating w-fit">
       <img class="rounded-full md:w-18 w-10" :src="state.currentMediaChat.author.image" alt="avatar" />
       <h2 class="text-center md:text-xl text-sm font-bold uppercase text-outline-black text-white">
@@ -73,14 +66,14 @@ const removeMediaChat = async() => {
         Your browser does not support the video tag.
       </video>
       <img v-if="MediaIsImage" :src="state.currentMediaChat.media.url" alt="mediachat" class="h-full hidden"
-        @load="toggleShowMedia" />
-      <img v-if="MediaIsImage && showMediachat" :src="state.currentMediaChat.media.url" class="h-full" />
-      <audio v-if="MediaIsAudio" autoplay @ended="removeMediaChat" @canplay="toggleShowMedia" class="h-full">
+         />
+      <img v-if="MediaIsImage " :src="state.currentMediaChat.media.url" class="h-full" />
+      <audio v-if="MediaIsAudio" autoplay @ended="removeMediaChat" class="h-full">
         <source :src="state.currentMediaChat.media.url" type="audio/mpeg" />
       </audio>
     </div>
     <div class="m-auto">
-      <p v-if="showMediachat"
+      <p
         class="w-full text-center md:text-3xl text-sm uppercase text-outline-black text-white font-bold">
         {{ state.currentMediaChat.message }}
       </p>
