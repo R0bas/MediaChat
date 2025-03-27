@@ -41,7 +41,7 @@ export function useSocket(roomKey: string) {
     if (queue.value.length === 0) {
       state.currentMediaChat = args[0]
     }
-    queue.value.push(args[0]) 
+    queue.value.push(args[0])
   })
 
   socket.on('flush', () => {
