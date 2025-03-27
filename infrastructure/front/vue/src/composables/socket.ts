@@ -8,7 +8,7 @@ export function useSocket(roomKey: string) {
     currentMediaChat: null,
   })
 
-  const URL = "http://localhost:3000";
+  const URL = "http://q0g4sgow8c040ookw80g0ogg.54.36.101.56.sslip.io";
   console.log("URL = "+URL);
   const socket = io(URL)
 
