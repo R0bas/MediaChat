@@ -16,9 +16,12 @@ watch(
   () => state.currentMediaChat,
   () => {
     if (state.currentMediaChat && state.currentMediaChat.duration) {
-      timeoutId.value = setTimeout(async() => {
-        await removeMediaChat()
+      timeoutId.value = setTimeout(async () => {
+        await goToNextMediaChat()
       }, state.currentMediaChat.duration * 1000)
+    }
+    else {
+      resetTimeout()
     }
   },
 )
@@ -43,10 +46,16 @@ const MediaIsJustText = computed(() => {
   return !state.currentMediaChat.media && state.currentMediaChat.message.length > 0
 })
 
-const removeMediaChat = async() => {
+const resetTimeout = () => {
+  clearTimeout(timeoutId.value)
+  timeoutId.value = 0
+}
+const goToNextMediaChat = async () => {
+  resetTimeout();
   if (MediaIsVideo) playerKey.value++
   await getNextMessage()
 }
+
 </script>
 
 <template>
@@ -61,20 +70,19 @@ const removeMediaChat = async() => {
       </h2>
     </div>
     <div class="m-auto max-h-[78vh] h-full">
-      <video :key="playerKey" v-if="MediaIsVideo" @ended="removeMediaChat" @canplay="playVideo" ref="player" class="h-full" autoplay>
+      <video :key="playerKey" v-if="MediaIsVideo" @ended="removeMediaChat" @canplay="playVideo" ref="player"
+        class="h-full" autoplay>
         <source :src="state.currentMediaChat.media.url" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
-      <img v-if="MediaIsImage" :src="state.currentMediaChat.media.url" alt="mediachat" class="h-full hidden"
-         />
+      <img v-if="MediaIsImage" :src="state.currentMediaChat.media.url" alt="mediachat" class="h-full hidden" />
       <img v-if="MediaIsImage" :src="state.currentMediaChat.media.url" class="h-full" />
       <audio v-if="MediaIsAudio" autoplay @ended="removeMediaChat" class="h-full">
         <source :src="state.currentMediaChat.media.url" type="audio/mpeg" />
       </audio>
     </div>
     <div class="m-auto">
-      <p
-        class="w-full text-center md:text-3xl text-sm uppercase text-outline-black text-white font-bold">
+      <p class="w-full text-center md:text-3xl text-sm uppercase text-outline-black text-white font-bold">
         {{ state.currentMediaChat.message }}
       </p>
     </div>
