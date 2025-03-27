@@ -8,7 +8,7 @@ export function useSocket(roomKey: string) {
     currentMediaChat: null,
   })
 
-  const URL = "http://q0g4sgow8c040ookw80g0ogg.54.36.101.56.sslip.io";
+  const URL = "http://localhost:3000";
   console.log("URL = "+URL);
   const socket = io(URL)
 
@@ -41,7 +41,7 @@ export function useSocket(roomKey: string) {
     if (queue.value.length === 0) {
       state.currentMediaChat = args[0]
     }
-    queue.value.push(args[0]) 
+    queue.value.push(args[0])
   })
 
   socket.on('flush', () => {
