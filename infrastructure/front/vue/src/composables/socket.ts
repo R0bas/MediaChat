@@ -1,15 +1,16 @@
-import { reactive, onUnmounted, onMounted, ref, type MaybeRefOrGetter, type MaybeRef, unref } from 'vue'
+import { onUnmounted, onMounted, ref,} from 'vue'
+
+
 import { io } from 'socket.io-client'
+import type { MediaChat } from '@/types'
 
 export function useSocket(roomKey: string) {
-  const queue = ref([])
-  const state = reactive({
-    connected: false,
-    currentMediaChat: null,
-  })
+  const queue = ref<MediaChat[]>([])
+  const connected = ref(false)
+  const currentMediaChat = ref<MediaChat | null>(null)
+
 
   const URL = "http://q0g4sgow8c040ookw80g0ogg.54.36.101.56.sslip.io";
-  console.log("URL = "+URL);
   const socket = io(URL)
 
   const getNextMessage = async () => {
@@ -18,35 +19,35 @@ export function useSocket(roomKey: string) {
     }
     if (queue.value.length === 1) {
       // FLUSH EQUIVALENT
-      state.currentMediaChat = null
+      currentMediaChat.value = null
       queue.value = []
     }
     else {
-      state.currentMediaChat = queue.value[1]
+      currentMediaChat.value = queue.value[1]
       queue.value = queue.value.slice(1)
     }
   }
 
   socket.on('connect', () => {
     console.log('connected')
-    state.connected = true
+    connected.value = true
     socket.emit('join', roomKey)
   })
 
   socket.on('disconnect', () => {
-    state.connected = false
+    connected.value = false
   })
 
   socket.on('mediachat', (...args) => {
     if (queue.value.length === 0) {
-      state.currentMediaChat = args[0]
+      currentMediaChat.value = args[0]
     }
     queue.value.push(args[0])
   })
 
   socket.on('flush', () => {
     queue.value = []
-    state.currentMediaChat = null
+    currentMediaChat.value = null
   })
 
   socket.on('skip', () => {
@@ -62,7 +63,8 @@ export function useSocket(roomKey: string) {
   })
 
   return {
-    state,
+    connected,
+    currentMediaChat,
     queue,
     socket,
     getNextMessage,

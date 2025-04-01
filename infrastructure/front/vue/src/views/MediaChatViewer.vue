@@ -7,23 +7,26 @@ const route = useRoute();
 const room = route.params.key as string ?? 'default';
 const timeoutId = ref(0)
 
-const { state, queue, getNextMessage } = useSocket(room)
+const { currentMediaChat, getNextMessage } = useSocket(room)
 const player = useTemplateRef('player')
 const playerKey = ref(0)
 
 
 watch(
-  () => state.currentMediaChat,
+  () => currentMediaChat,
   () => {
-    if (state.currentMediaChat && state.currentMediaChat.duration) {
+    if (currentMediaChat.value && currentMediaChat.value.duration) {
+      console.log('is MediaChat ', currentMediaChat.value)
       timeoutId.value = setTimeout(async () => {
         await goToNextMediaChat()
-      }, state.currentMediaChat.duration * 1000)
+      }, currentMediaChat.value.duration * 1000)
     }
     else {
+      console.log('is not MediaChat')
       resetTimeout()
     }
   },
+  {deep: true}
 )
 
 const playVideo = () => {
@@ -34,16 +37,13 @@ const playVideo = () => {
 
 
 const MediaIsVideo = computed(() => {
-  return state.currentMediaChat.media && state.currentMediaChat.media.type === 'video'
+  return currentMediaChat.value?.media && currentMediaChat.value.media.type === 'video'
 })
 const MediaIsImage = computed(() => {
-  return state.currentMediaChat.media && state.currentMediaChat.media.type === 'image'
+  return currentMediaChat.value?.media && currentMediaChat.value.media.type === 'image'
 })
 const MediaIsAudio = computed(() => {
-  return state.currentMediaChat.media && state.currentMediaChat.media.type === 'sound'
-})
-const MediaIsJustText = computed(() => {
-  return !state.currentMediaChat.media && state.currentMediaChat.message.length > 0
+  return currentMediaChat.value?.media && currentMediaChat.value.media.type === 'sound'
 })
 
 const resetTimeout = () => {
@@ -55,35 +55,33 @@ const goToNextMediaChat = async () => {
   if (MediaIsVideo) playerKey.value++
   await getNextMessage()
 }
-
 </script>
 
 <template>
   <div
     class="grid grid-rows-[1fr_3fr_1fr] items-start select-none bg-opacity-1 h-screen gap-2 mt-4 w-full px-5 overflow-y-hidden"
-    v-if="state.currentMediaChat">
-    <div v-if="!state.currentMediaChat.options.hideAuthor" id="avatar"
+    v-if="currentMediaChat">
+    <div v-if="!currentMediaChat.options?.hideAuthor" id="avatar"
       class="flex flex-col justify-between items-center floating w-fit">
-      <img class="rounded-full md:w-18 w-10" :src="state.currentMediaChat.author.image" alt="avatar" />
+      <img class="rounded-full md:w-18 w-10" :src="currentMediaChat.author.image" alt="avatar" />
       <h2 class="text-center md:text-xl text-sm font-bold uppercase text-outline-black text-white">
-        {{ state.currentMediaChat.author.name }}
+        {{ currentMediaChat.author.name }}
       </h2>
     </div>
     <div class="m-auto max-h-[78vh] h-full">
-      <video :key="playerKey" v-if="MediaIsVideo" @ended="removeMediaChat" @canplay="playVideo" ref="player"
+      <video :key="playerKey" v-if="MediaIsVideo" @ended="goToNextMediaChat" @canplay="playVideo" ref="player"
         class="h-full" autoplay>
-        <source :src="state.currentMediaChat.media.url" type="video/mp4" />
+        <source v-if="currentMediaChat.media" :src="currentMediaChat.media.url" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
-      <img v-if="MediaIsImage" :src="state.currentMediaChat.media.url" alt="mediachat" class="h-full hidden" />
-      <img v-if="MediaIsImage" :src="state.currentMediaChat.media.url" class="h-full" />
-      <audio v-if="MediaIsAudio" autoplay @ended="removeMediaChat" class="h-full">
-        <source :src="state.currentMediaChat.media.url" type="audio/mpeg" />
+      <img v-if="MediaIsImage && currentMediaChat.media?.url" :src="currentMediaChat.media.url" class="h-full" />
+      <audio v-if="MediaIsAudio" autoplay @ended="goToNextMediaChat" class="h-full">
+        <source v-if="currentMediaChat.media" :src="currentMediaChat.media.url" type="audio/mpeg" />
       </audio>
     </div>
     <div class="m-auto">
       <p class="w-full text-center md:text-3xl text-sm uppercase text-outline-black text-white font-bold">
-        {{ state.currentMediaChat.message }}
+        {{ currentMediaChat.message }}
       </p>
     </div>
   </div>
