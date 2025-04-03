@@ -9,7 +9,6 @@ import { SendMediaChat } from "../../socket/SendMediaChat";
 import { CreateMediaChat } from "../../../application/usecases/CreateMediaChat";
 import { io } from "../../../app";
 import { Author } from "../../../domain/entities/Author";
-import youtubeDl, { Payload } from "youtube-dl-exec";
 import { formatReply } from "../utils";
 
 export const data = new SlashCommandBuilder()
@@ -54,24 +53,38 @@ export const data = new SlashCommandBuilder()
 
 export const execute = async (interaction: ChatInputCommandInteraction) => {
   const url = interaction.options.getString("url");
+  await interaction.deferReply();
 
   if (!url) {
     await interaction.reply("No url provided.");
     return;
   }
-  interaction.deferReply();
-  const test =await youtubeDl(url, {
-    dumpSingleJson: true,
-    noCheckCertificates: true,
-    noWarnings: true,
-    preferFreeFormats: true,
-    addHeader: ["referer:youtube.com", "user-agent:googlebot"],
-    format: "best[ext=mp4]",
-  }) as Payload;
-const requestedDownload = test.requested_downloads[0] as Record<string, unknown>;
+
+
+
+  const cobaltResult = await fetch(
+    'http://localhost:9000/',
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify({ url }),
+    }
+  )
+  const cobaltJson = (await cobaltResult.json()) as { status: string; picker?: { url: string }[]; url?: string };
+  let newUrl;
+  if (cobaltJson.status === "picker") {
+    newUrl = cobaltJson.picker && cobaltJson.picker[0] ? cobaltJson.picker[0].url : undefined;
+  }
+  if (cobaltJson.status === "tunnel") {
+    newUrl = cobaltJson.url
+  }
+  console.log(newUrl)
   const media: Media = {
     type: "video",
-    url: requestedDownload.url as string,
+    url: newUrl as string,
     id: url,
   };
 
@@ -125,6 +138,6 @@ const requestedDownload = test.requested_downloads[0] as Record<string, unknown>
   }
     catch (error) {
         console.error(error);
-        await interaction.editReply("An error occurred.");
+        await interaction.followUp("tets An error occurred while sending the media chat.");
     }
 };
