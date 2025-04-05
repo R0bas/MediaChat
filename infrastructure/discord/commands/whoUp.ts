@@ -11,7 +11,7 @@ export const execute = async (interaction: ChatInputCommandInteraction) => {
         .map(([key]) => key);
     let discordResponse ="";
     if (usersList.length === 0) {
-        discordResponse = "Aucun utilisateur n'est actuellement connecté.";
+        discordResponse = "No user connected.";
       }
       
       if (usersList.length === 1) {
