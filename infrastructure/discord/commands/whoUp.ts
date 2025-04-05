@@ -15,7 +15,7 @@ export const execute = async (interaction: ChatInputCommandInteraction) => {
       }
       
       if (usersList.length === 1) {
-        discordResponse = `${usersList[0]} est actuellement connecté.`;
+        discordResponse = `Only ${usersList[0]} is connected.`;
       }
       
       const lastUser = usersList[usersList.length - 1];
