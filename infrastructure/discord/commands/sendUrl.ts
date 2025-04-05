@@ -60,10 +60,8 @@ export const execute = async (interaction: ChatInputCommandInteraction) => {
     return;
   }
 
-
-
   const cobaltResult = await fetch(
-    'http://localhost:9000/',
+    'http://cobalt-api:9000/',
     {
       method: 'POST',
       headers: {
@@ -81,7 +79,6 @@ export const execute = async (interaction: ChatInputCommandInteraction) => {
   if (cobaltJson.status === "tunnel") {
     newUrl = cobaltJson.url
   }
-  console.log(newUrl)
   const media: Media = {
     type: "video",
     url: newUrl as string,
