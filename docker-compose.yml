@@ -4,8 +4,6 @@ services:
       context: .
       dockerfile: infrastructure/express/Dockerfile
       target: production
-    ports:
-      - 3000:3000
     environment:
       - NODE_ENV=production
       - DISCORD_GUILD_ID=${DISCORD_GUILD_ID}
