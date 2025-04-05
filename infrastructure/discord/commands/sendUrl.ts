@@ -135,6 +135,6 @@ export const execute = async (interaction: ChatInputCommandInteraction) => {
   }
     catch (error) {
         console.error(error);
-        await interaction.followUp("tets An error occurred while sending the media chat.");
+        await interaction.followUp("An error occurred while sending the media chat.");
     }
 };
