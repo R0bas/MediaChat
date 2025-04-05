@@ -9,5 +9,5 @@ export const data = new SlashCommandBuilder()
 
     export const execute = async (interaction: ChatInputCommandInteraction) => {
         io.emit('flush');
-        await interaction.reply("Queue flushed");
+        await interaction.reply("Queue... flushed... 😳 ");
     }
