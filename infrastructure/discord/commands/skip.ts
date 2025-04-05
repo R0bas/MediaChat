@@ -9,5 +9,5 @@ export const data = new SlashCommandBuilder()
 
     export const execute = async (interaction: ChatInputCommandInteraction) => {
         io.emit('skip');
-        await interaction.reply("Skipped");
+        await interaction.reply("Skibidi Skipped 🚽🧌");
     }
