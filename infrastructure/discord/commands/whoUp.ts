@@ -21,7 +21,7 @@ export const execute = async (interaction: ChatInputCommandInteraction) => {
       const lastUser = usersList[usersList.length - 1];
       const otherUsers = usersList.slice(0, -1).join(', ');
       
-      discordResponse = `${otherUsers} et ${lastUser} sont actuellement connectés.`;
+      discordResponse = `${otherUsers} and ${lastUser} are connected.`;
 
     await interaction.deferReply();
     await interaction.editReply(`${discordResponse}`);
