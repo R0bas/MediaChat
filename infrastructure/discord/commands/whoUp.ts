@@ -2,7 +2,7 @@ import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
 import { io } from "../../../app";
 
 export const data = new SlashCommandBuilder()
-    .setName("whoup")
+    .setName("whosup")
     .setDescription("Who is using the bot?")
 
 export const execute = async (interaction: ChatInputCommandInteraction) => {
