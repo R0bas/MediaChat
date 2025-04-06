@@ -61,7 +61,7 @@ export const execute = async (interaction: ChatInputCommandInteraction) => {
   }
 
   const cobaltResult = await fetch(
-    'http://cobalt-api:9000/',
+    process.env.COBALT_URL || "",
     {
       method: 'POST',
       headers: {

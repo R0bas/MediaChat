@@ -45,7 +45,7 @@ services:
       environment:
           # replace https://api.url.example/ with your instance's url
           # or else tunneling functionality won't work properly
-          API_URL: ${BACKEND_URL}
+          API_URL: ${TUNNEL_URL}
 
           # if you want to use cookies for fetching data from services,
           # uncomment the next line & volumes section
