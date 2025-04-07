@@ -9,7 +9,7 @@ services:
       - DISCORD_GUILD_ID=${DISCORD_GUILD_ID}
       - DISCORD_CLIENT_ID=${DISCORD_CLIENT_ID}
       - DISCORD_TOKEN=${DISCORD_TOKEN}
-      - COBALT_URL=cobalt-api
+      - COBALT_URL=http://cobalt-api
     env_file:
       - .env      
 
@@ -29,7 +29,7 @@ services:
       init: true
       read_only: true
       restart: unless-stopped
-      container_name: http://cobalt-api
+      container_name: cobalt-api
       environment:
           # replace https://api.url.example/ with your instance's url
           # or else tunneling functionality won't work properly
