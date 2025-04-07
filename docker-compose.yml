@@ -29,11 +29,11 @@ services:
       init: true
       read_only: true
       restart: unless-stopped
-      container_name: cobalt-api
+      container_name: http://cobalt-api
       environment:
           # replace https://api.url.example/ with your instance's url
           # or else tunneling functionality won't work properly
-          API_URL: http://lc40848gk88g48wkw80okoco.54.36.101.56.sslip.io
+          API_URL: http://cobalt-api
 
           # if you want to use cookies for fetching data from services,
           # uncomment the next line & volumes section
