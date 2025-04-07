@@ -8,10 +8,7 @@ export function useSocket(roomKey: string) {
   const queue = ref<MediaChat[]>([])
   const connected = ref(false)
   const currentMediaChat = ref<MediaChat | null>(null)
-
-
-  const URL = "http://q0g4sgow8c040ookw80g0ogg.54.36.101.56.sslip.io";
-  const socket = io(URL)
+  const socket = io(import.meta.env.VITE_API_URL)
 
   const getNextMessage = async () => {
     if (queue.value.length === 0) {
