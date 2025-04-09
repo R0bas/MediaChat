@@ -36,16 +36,14 @@ services:
       restart: unless-stopped
       container_name: cobalt-api
       # development only
-      ports:
-          - 9000:9000/tcp
-          # if you use a reverse proxy (such as nginx),
-          # uncomment the next line and remove the one above (9000:9000/tcp):
-          # - 127.0.0.1:9000:9000
 
       environment:
           # replace https://api.url.example/ with your instance's url
           # or else tunneling functionality won't work properly
           API_URL: ${TUNNEL_URL}
+        
+          
+
 
           # if you want to use cookies for fetching data from services,
           # uncomment the next line & volumes section
@@ -60,8 +58,8 @@ services:
           - com.centurylinklabs.watchtower.scope=cobalt
 
       # uncomment only if you use the COOKIE_PATH variable
-      # volumes:
-          # - ./cookies.json:/cookies.json
+      volumes:
+          - ./keys.json:/keys.json:ro # ro - read-only
 
   # watchtower updates the cobalt image automatically
   watchtower:
