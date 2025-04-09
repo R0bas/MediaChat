@@ -31,11 +31,10 @@ Inspired by the **CCB**, a collective of French streamers, MediaChat allows you 
     You will need to add the following variables:
     ```bash
         DISCORD_TOKEN=YOUR_DISCORD_TOKEN
-DISCORD_CLIENT_ID=YOUR_DISCORD_CLIENT_ID
-DISCORD_GUILD_ID=YOUR_DISCORD_GUILD_ID
-COBALT_URL=http://cobalt-api:9000/
-BACKEND_URL=http://localhost:3000
-TUNNEL_URL=http://localhost:9000
+        DISCORD_CLIENT_ID=YOUR_DISCORD_CLIENT_ID
+        DISCORD_GUILD_ID=YOUR_DISCORD_GUILD_ID
+        COBALT_URL=http://cobalt-api:9000/
+        BACKEND_URL=http://localhost:3000
     ```
     - You can get your **DISCORD_TOKEN** by creating a bot on the [Discord Developer Portal](https://discord.com/developers/applications).
     - You can get your **DISCORD_CLIENT_ID** and **DISCORD_GUILD_ID** by creating a bot on the [Discord Developer Portal](https://discord.com/developers/applications).
