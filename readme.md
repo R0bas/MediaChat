@@ -1,4 +1,4 @@
-# 🎉 MediaChat - Connectez-vous, Partagez, Kiffez ! 🎉
+# 🎉 MediaChat 
 
 Welcome to **MediaChat**, the app to send texts, images, videos, and audio directly to your friends' screens using Discord commands!
 
@@ -41,9 +41,6 @@ Inspired by the **CCB**, a collective of French streamers, MediaChat allows you 
     - You can get your **COBALT_URL** by creating a bot on the [Cobalt API](https://cobalt-api.com/).
     - You can get your **BACKEND_URL** by creating a bot on the [Backend API](https://backend-api.com/).
     - You can get your **TUNNEL_URL** by creating a bot on the [Tunnel API](https://tunnel-api.com/).
-
-4. **Install dependencies** :
-    ```bash 
 4. **use docker** :
     ```bash
     docker-compose up -d --build
