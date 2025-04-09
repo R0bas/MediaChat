@@ -52,8 +52,7 @@ services:
           - com.centurylinklabs.watchtower.scope=cobalt
 
       # uncomment only if you use the COOKIE_PATH variable
-      volumes:
-          - ./keys.json:/keys.json:ro # ro - read-only
+    
 
   # watchtower updates the cobalt image automatically
   watchtower:
