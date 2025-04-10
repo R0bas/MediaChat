@@ -13,6 +13,7 @@ services:
       - DISCORD_CLIENT_ID=${DISCORD_CLIENT_ID}
       - DISCORD_TOKEN=${DISCORD_TOKEN}
       - COBALT_URL=http://cobalt-api:9000/
+      - YT_SESSION_URL=http://yt-session-generator:8080
     env_file:
       - .env
     depends_on:
@@ -41,7 +42,7 @@ services:
           # replace https://api.url.example/ with your instance's url
           # or else tunneling functionality won't work properly
           API_URL: ${BACKEND_URL}
-          YOUTUBE_SESSION_SERVER: "http://yt-session-generator:8080"
+          YOUTUBE_SESSION_SERVER: "${BACKEND_URL}/token"
 
 
 
