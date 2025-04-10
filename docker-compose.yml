@@ -4,20 +4,26 @@ services:
       context: .
       dockerfile: infrastructure/express/Dockerfile
       target: production
+    # use it on development only
+    # ports:
+      # - 3000:3000/tcp  
     environment:
       - NODE_ENV=production
       - DISCORD_GUILD_ID=${DISCORD_GUILD_ID}
       - DISCORD_CLIENT_ID=${DISCORD_CLIENT_ID}
       - DISCORD_TOKEN=${DISCORD_TOKEN}
-      - COBALT_URL=http://cobalt-api:9000
+      - COBALT_URL=http://cobalt-api:9000/
     env_file:
-      - .env      
+      - .env
 
   frontend:
     build:
       context: ./infrastructure/front/vue
       dockerfile: Dockerfile
       target: production
+    # use it on development only
+    # ports:
+      # - 8080:80/tcp
     environment:
       - VITE_API_URL=${BACKEND_URL}
     depends_on:
@@ -30,10 +36,12 @@ services:
       read_only: true
       restart: unless-stopped
       container_name: cobalt-api
+      # development only
       environment:
           # replace https://api.url.example/ with your instance's url
           # or else tunneling functionality won't work properly
-          API_URL: http://cobalt-api:9000
+          API_URL: ${BACKEND_URL}
+
 
           # if you want to use cookies for fetching data from services,
           # uncomment the next line & volumes section
@@ -48,8 +56,7 @@ services:
           - com.centurylinklabs.watchtower.scope=cobalt
 
       # uncomment only if you use the COOKIE_PATH variable
-      # volumes:
-          # - ./cookies.json:/cookies.json
+    
 
   # watchtower updates the cobalt image automatically
   # watchtower:
