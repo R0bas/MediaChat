@@ -79,6 +79,9 @@ export const execute = async (interaction: ChatInputCommandInteraction) => {
   if (cobaltJson.status === "tunnel") {
     newUrl = cobaltJson.url
   }
+  if (cobaltJson.status === "redirect") {
+    newUrl = cobaltJson.url
+  }
   const media: Media = {
     type: "video",
     url: newUrl as string,
