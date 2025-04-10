@@ -12,6 +12,7 @@ services:
       - DISCORD_GUILD_ID=${DISCORD_GUILD_ID}
       - DISCORD_CLIENT_ID=${DISCORD_CLIENT_ID}
       - DISCORD_TOKEN=${DISCORD_TOKEN}
+      - COBALT_URL=http://cobalt-api:9000/
     env_file:
       - .env
     depends_on:
@@ -43,6 +44,7 @@ services:
           YOUTUBE_SESSION_SERVER: "http://yt-session-generator:8080"
 
 
+
           # if you want to use cookies for fetching data from services,
           # uncomment the next line & volumes section
           # COOKIE_PATH: "/cookies.json"
@@ -59,12 +61,12 @@ services:
     
 
   # watchtower updates the cobalt image automatically
-  watchtower:
-      image: ghcr.io/containrrr/watchtower
-      restart: unless-stopped
-      command: --cleanup --scope cobalt --interval 900 --include-restarting
-      volumes:
-          - /var/run/docker.sock:/var/run/docker.sock
+  # watchtower:
+  #     image: ghcr.io/containrrr/watchtower
+  #     restart: unless-stopped
+  #     command: --cleanup --scope cobalt --interval 900 --include-restarting
+  #     volumes:
+  #         - /var/run/docker.sock:/var/run/docker.sock
 
   # if needed, use this image for automatically generating poToken & visitor_data
   yt-session-generator:
