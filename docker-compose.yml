@@ -42,9 +42,7 @@ services:
           # replace https://api.url.example/ with your instance's url
           # or else tunneling functionality won't work properly
           API_URL: ${BACKEND_URL}
-          YOUTUBE_SESSION_SERVER: "${BACKEND_URL}/token"
-
-
+          YOUTUBE_SESSION_SERVER: "http://q0g4sgow8c040ookw80g0ogg.54.36.101.56.sslip.io/token"
 
           # if you want to use cookies for fetching data from services,
           # uncomment the next line & volumes section
@@ -57,7 +55,8 @@ services:
 
       labels:
           - com.centurylinklabs.watchtower.scope=cobalt
-             
+      depends_on:
+      - backend     
       # uncomment only if you use the COOKIE_PATH variable
     
 
