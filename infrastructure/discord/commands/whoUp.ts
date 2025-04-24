@@ -10,18 +10,18 @@ export const execute = async (interaction: ChatInputCommandInteraction) => {
         .filter(([key]) => !io.sockets.sockets.has(key))
         .map(([key]) => key);
     let discordResponse ="";
-    if (usersList.length === 0) {
+    if (usersList.length === 0)
         discordResponse = "No user connected.";
-      }
       
-      if (usersList.length === 1) {
+    else if (usersList.length === 1) 
         discordResponse = `Only ${usersList[0]} is connected.`;
-      }
-      
+    
+    else {
       const lastUser = usersList[usersList.length - 1];
       const otherUsers = usersList.slice(0, -1).join(', ');
       
       discordResponse = `${otherUsers} and ${lastUser} are connected.`;
+    }
 
     await interaction.deferReply();
     await interaction.editReply(`${discordResponse}`);
