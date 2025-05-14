@@ -120,7 +120,7 @@ export const execute = async (interaction: ChatInputCommandInteraction) => {
     duration = 5;
   }
  try {
-   await createMediaChat.execute(
+   const newMediaChat = await createMediaChat.execute(
       author,
       duration,
       media,
@@ -132,7 +132,7 @@ export const execute = async (interaction: ChatInputCommandInteraction) => {
         author,
         mediaChatOptions,
         interaction.options.getString("text"),
-        interaction.options.getString("url")
+        newMediaChat.media?.url || interaction.options.getString("url")
       )
     );
   }
