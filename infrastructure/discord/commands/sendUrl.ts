@@ -127,7 +127,7 @@ export const execute = async (interaction: ChatInputCommandInteraction) => {
       interaction.options.getString("text") || "",
       mediaChatOptions
     );
-   const hyperlinkURL = `[${newMediaChat.media?.url || interaction.options.getString("url")}](this media)`
+   const hyperlinkURL = `[${newMediaChat.media?.url || interaction.options.getString("url")}](this media)`;
     await interaction.editReply(
       formatReply(
         author,
