@@ -1,6 +1,9 @@
 import { Author } from "../../domain/entities/Author";
 import { MediachatOptions } from "../../domain/entities/MediaChat";
 
+export const isInstagramPhotoUrl = (url:string) {
+  return /^https:\/\/www\.instagram\.com\/p\/[A-Za-z0-9_    -]+\/?(?:\?[^#]*)?$/.test(url);
+}
 export const getFileContentType = (contentType: string) => {
     if (contentType.includes("image")) {
         return "image";

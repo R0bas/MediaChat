@@ -9,7 +9,7 @@ import { SendMediaChat } from "../../socket/SendMediaChat";
 import { CreateMediaChat } from "../../../application/usecases/CreateMediaChat";
 import { io } from "../../../app";
 import { Author } from "../../../domain/entities/Author";
-import { formatReply } from "../utils";
+import { formatReply,isInstagramPhotoUrl } from "../utils";
 
 export const data = new SlashCommandBuilder()
   .setName("sendurl")
@@ -82,8 +82,9 @@ export const execute = async (interaction: ChatInputCommandInteraction) => {
   if (cobaltJson.status === "redirect") {
     newUrl = cobaltJson.url
   }
+
   const media: Media = {
-    type: "video",
+    type: isInstagramPhotoUrl(url) ? "image": "video",
     url: newUrl as string,
     id: url,
   };
