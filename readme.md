@@ -2,7 +2,7 @@
 
 Welcome to **MediaChat**, the app to send texts, images, videos, and audio directly to your friends' screens using Discord commands!
 
-Inspired by the **CCB**, a collective of French streamers, MediaChat allows you to display images accompanied by text directly on your friends' screens. And for an even more fun experience, use it with **Transparent Overlay**!
+Inspired by the **CCB**, a collective of French streamers, MediaChat allows you to display images accompanied by text directly on your friends' screens. And for an even more fun experience, use it with [**Transparent Overlay**](https://github.com/ProbablyClem/transparent-overlay/releases) !
 
 ---
 
@@ -37,10 +37,7 @@ Inspired by the **CCB**, a collective of French streamers, MediaChat allows you 
         BACKEND_URL=http://localhost:3000
     ```
     - You can get your **DISCORD_TOKEN** by creating a bot on the [Discord Developer Portal](https://discord.com/developers/applications).
-    - You can get your **DISCORD_CLIENT_ID** and **DISCORD_GUILD_ID** by creating a bot on the [Discord Developer Portal](https://discord.com/developers/applications).
-    - You can get your **COBALT_URL** by creating a bot on the [Cobalt API](https://cobalt-api.com/).
-    - You can get your **BACKEND_URL** by creating a bot on the [Backend API](https://backend-api.com/).
-    - You can get your **TUNNEL_URL** by creating a bot on the [Tunnel API](https://tunnel-api.com/).
+    - You can get your **DISCORD_CLIENT_ID** and **DISCORD_GUILD_ID** via the Discord App (right click on the Bot and on the Server to get the ID)
 4. **use docker** :
     ```bash
     docker-compose up -d --build
