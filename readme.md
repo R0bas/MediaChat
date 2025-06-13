@@ -57,7 +57,7 @@ Inspired by the **CCB**, a collective of French streamers, MediaChat allows you 
 
 ## 🤩 Join the Adventure
 
-Want to contribute your magic touch? We love it! Here's how you can get involved:
+Want to contribute your magic touch? We love it! Here's how you can get involved :
 
 1. **Fork the project**.
 2. **Create a funky branch**:
