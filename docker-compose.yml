@@ -12,8 +12,12 @@ services:
       - DISCORD_GUILD_ID=${DISCORD_GUILD_ID}
       - DISCORD_CLIENT_ID=${DISCORD_CLIENT_ID}
       - DISCORD_TOKEN=${DISCORD_TOKEN}
+      - COBALT_URL=http://cobalt-api:9000/
+      - YT_SESSION_URL=http://yt-session-generator:8080
     env_file:
       - .env
+    depends_on:
+      - yt-session-generator
 
   frontend:
     build:
@@ -27,7 +31,7 @@ services:
       - backend
 
   cobalt-api:
-      image: ghcr.io/imputnet/cobalt:11
+      image: ghcr.io/imputnet/cobalt:10
 
       init: true
       read_only: true
@@ -38,6 +42,8 @@ services:
           # replace https://api.url.example/ with your instance's url
           # or else tunneling functionality won't work properly
           API_URL: ${BACKEND_URL}
+          YOUTUBE_SESSION_SERVER: "http://q0g4sgow8c040ookw80g0ogg.54.36.101.56.sslip.io/token"
+
           # if you want to use cookies for fetching data from services,
           # uncomment the next line & volumes section
           # COOKIE_PATH: "/cookies.json"
@@ -63,3 +69,13 @@ services:
   #         - /var/run/docker.sock:/var/run/docker.sock
 
   # if needed, use this image for automatically generating poToken & visitor_data
+  yt-session-generator:
+      image: ghcr.io/imputnet/yt-session-generator:webserver
+      # ports:
+      #  - 127.0.0.1:8000:8080
+
+      init: true
+      restart: unless-stopped
+      container_name: yt-session-generator
+      labels:
+        - com.centurylinklabs.watchtower.scope=cobalt
