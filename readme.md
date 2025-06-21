@@ -51,7 +51,7 @@ Inspired by the **CCB**, a collective of French streamers, MediaChat allows you 
 - ⚙️ **Backend** : Node.js + Express.
 - 🌐 **WebSocket** : Socket.IO
 - 🐳 **Containerisation** : Docker.
-- 🎮 **Discord.js**: Generating Discord commands 
+- 🎮 **DiscordJS**: Generating Discord commands 
 
 ---
 
