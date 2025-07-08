@@ -23,7 +23,7 @@ export const execute = async (interaction: ChatInputCommandInteraction) => {
       discordResponse = `${otherUsers} and ${lastUser} are connected.`;
     }
 
-    await interaction.deferReply();
+    await interaction.deferReply({ephemeral: true});
     await interaction.editReply(`${discordResponse}`);
 }
 
