@@ -38,7 +38,7 @@ Inspired by the **CCB**, a collective of French streamers, MediaChat allows you 
     ```
     - You can get your **DISCORD_TOKEN** by creating a bot on the [Discord Developer Portal](https://discord.com/developers/applications).
     - You can get your **DISCORD_CLIENT_ID** and **DISCORD_GUILD_ID** via the Discord App (right click on the Bot and on the Server to get the ID)
-4. **use docker** :
+4. **use docker compose** :
     ```bash
     docker-compose up -d --build
     ```
@@ -51,13 +51,13 @@ Inspired by the **CCB**, a collective of French streamers, MediaChat allows you 
 - ⚙️ **Backend** : Node.js + Express.
 - 🌐 **WebSocket** : Socket.IO
 - 🐳 **Containerisation** : Docker.
-- 🎮 **Discord.js**: Generating Discord commands 
+- 🎮 **DiscordJS**: Generating Discord commands 
 
 ---
 
 ## 🤩 Join the Adventure
 
-Want to contribute your magic touch? We love it! Here's how you can get involved:
+Want to contribute your magic touch? We love it! Here's how you can get involved :
 
 1. **Fork the project**.
 2. **Create a funky branch**:

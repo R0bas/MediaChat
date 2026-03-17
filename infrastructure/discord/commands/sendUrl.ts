@@ -101,8 +101,8 @@ export const execute = async (interaction: ChatInputCommandInteraction) => {
         "center") as unknown as PositionX,
       positionY: (interaction.options.getString("positiony") ||
         "center") as unknown as PositionY,
-      color: interaction.options.getString("text_color") || "#000000",
-      fontSize: interaction.options.getInteger("text_font_size") || 16,
+      color: interaction.options.getString("text_color") || "#ffffff",
+      fontSize: interaction.options.getInteger("text_font_size") || 24,
       fontFamily: interaction.options.getString("text_font") || "Arial",
     },
     hideAuthor: interaction.options.getBoolean("anonymous") || false,
